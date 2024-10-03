@@ -3,6 +3,7 @@ import { FaHome, FaBriefcase, FaUsers, FaFileAlt } from 'react-icons/fa';
 import { MdMenu, MdClose } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
+
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const [subMenuOpen, setSubMenuOpen] = useState(false);
@@ -26,7 +27,7 @@ const Sidebar = () => {
         <nav className="flex-grow overflow-y-auto">
           <ul className="flex flex-col">
             <li className=''>
-              <Link to="/" className="flex items-center p-4 hover:bg-blue-50">
+              <Link to="/signup" className="flex items-center p-4 hover:bg-blue-50">
                 <FaHome className="text-3xl" />
                 {open && <span className="ml-4 text-xl font-medium">Home</span>}
               </Link>
