@@ -4,31 +4,27 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-function Signin() {
-  const [username, setUsername] = useState("");
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault(); 
-    if (!username || !email || !password || !role) {
+    if (!email || !password) {
       toast.error("Please fill all the fields");
       return;
     }
     try {
       setIsSubmitting(true);
-      const response = await axios.post(`${API}/api/register`, {
-        username,
+      const response = await axios.post(`${API}/api/login`, {
         email,
-        password,
-        role,
+        password
       });
 
       if (response.status === 200) {
-        toast.success("User registered successfully");
+        toast.success("Login successfully");
         const token = response.data.data.token;
         localStorage.setItem("token", token);
         navigate("/");
@@ -49,7 +45,7 @@ function Signin() {
       {/* left */}
       <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-tr from-techBlue-600 via-blue-500 to-techBlue-500 rounded-r-3xl">
         <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 text-center">
-          Welcome to Tech Help
+          Welcome back to Tech Help
         </h1>
         <p className="text-white text-lg md:text-xl text-center">
           Your gateway to mentorship, blogs, and jobs.
@@ -64,18 +60,6 @@ function Signin() {
               Sign Up
             </h2>
             <form className="flex flex-col" onSubmit={handleSubmit}>
-              <label className="text-lg font-semibold mb-2">Enter Full Name</label>
-              <input
-                className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
-                type="text"
-                placeholder="Name or Company Name"
-                id="fullname"
-                name="fullname"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            
               <label className="text-lg font-semibold mb-2">Enter Email</label>
               <input
                 className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
@@ -100,21 +84,6 @@ function Signin() {
                 required
               />
             
-              <label className="text-lg font-semibold mb-2">Select Your Role</label>
-              <select
-                className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
-                id="role"
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-              >
-                <option value="">Select a Role</option> 
-                <option value="student">Student</option>
-                <option value="mentor">Mentor</option>
-                <option value="company">Company</option>
-              </select>
-
               {isSubmitting ? (
                 <button
                   type="button"
@@ -133,8 +102,8 @@ function Signin() {
               )}
             </form>
             <div className="flex">
-                <p>Already have account ?</p> 
-                <Link className="ml-4" to = "/login">Log In</Link>
+                <p>Create new account ?</p> 
+                <Link className="ml-4" to = "/signup">Sign Up</Link>
             </div>
           </div>
         </section>
@@ -143,4 +112,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Login;

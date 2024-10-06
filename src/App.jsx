@@ -8,6 +8,9 @@ import { useState } from 'react';
 import Signin from './pages/Signup';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Login from './pages/Login';
+import UserDashboard from './pages/DashBoard/UserDashboard';
+
 
 function App() {
   const [activePage, setActivePage] = useState('home');
@@ -22,6 +25,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={<Signin/>}/>
+              <Route path="/login" element={<Login/>}/>
+              <Route path="/userdashboard" element={<UserDashboard/>}/>
+              
             </Routes>
           </main>
         </div>
