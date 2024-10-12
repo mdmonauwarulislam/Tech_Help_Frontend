@@ -10,6 +10,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from './pages/Login';
 import UserDashboard from './pages/DashBoard/UserDashboard';
+import EditProfileFrom from './components/dashboard/EditProfileForm';
+import JobSeekingForm from './components/JobSeekingForm';
+import RecuiterRegisterForm from './components/RecuiterRegisterForm';
+
 
 
 function App() {
@@ -27,6 +31,10 @@ function App() {
               <Route path="/signup" element={<Signin/>}/>
               <Route path="/login" element={<Login/>}/>
               <Route path="/userdashboard" element={<UserDashboard/>}/>
+              <Route path="/userdashboard/edit-profile" element={<EditProfileFrom/>}/>
+              <Route path="/signup/user-register" element={<JobSeekingForm/>}/>
+              <Route path="/signup/employee-register" element={<RecuiterRegisterForm/>}/>
+              
               
             </Routes>
           </main>

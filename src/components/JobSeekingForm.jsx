@@ -3,81 +3,66 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { login } from "../redux/slice/userSlice";
 
-function Login() {
+function JobSeekingForm() {
+
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!email || !password) {
+    e.preventDefault(); 
+    if (!username || !email || !password ) {
       toast.error("Please fill all the fields");
       return;
     }
     try {
       setIsSubmitting(true);
-      const response = await axios.post(`${API}/api/login`, {
+      const response = await axios.post(`${API}/api/register`, {
+        username,
         email,
         password,
+        role :"student"
       });
 
       if (response.status === 200) {
-        toast.success("Login successfully");
-        const token = response.data.data.token;
-        const userData = response.data.data.user;
-
-        localStorage.setItem("token", token);
-        dispatch(login({
-          user: userData, token 
-        }));
-
-        if(userData.role === "student"){
-          if(!userData.isProfileCompleted){
-            navigate("/userdashboard");
-          }else{
-            navigate("/");
-          }
-        }else{
-          navigate("/dashboard");
-        }
+        toast.success("User registered successfully");
+        navigate("/");
       }
+      
     } catch (error) {
       setIsSubmitting(false);
       if (error.response && error.response.status === 400) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message ); 
       } else {
         toast.error("Something went wrong");
       }
-    }
+    } 
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 py-10">
-      {/* left */}
-      <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-tr from-techBlue-600 via-blue-500 to-techBlue-500 rounded-r-3xl">
-        <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 text-center">
-          Welcome back to Tech Help
-        </h1>
-        <p className="text-white text-lg md:text-xl text-center">
-          Your gateway to mentorship, blogs, and jobs.
-        </p>
-      </div>
-
-      {/* right */}
+    <div>
       <div className="flex items-center justify-center min-h-screen p-4 md:p-6 text-primary">
         <section className="bg-white shadow-2xl p-6 md:p-10 rounded-md w-full max-w-md ">
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-              Sign Up
+              Register for Job Seeking
             </h2>
             <form className="flex flex-col" onSubmit={handleSubmit}>
-              <label className="text-lg font-semibold mb-2">Enter Email</label>
+            <label className="text-lg font-semibold mt-2">Enter Full Name</label>
+              <input
+                className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
+                type="name"
+                placeholder="Enter your full name"
+                id="name"
+                name="name"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+              <label className="text-lg font-semibold mt-2">Enter Email</label>
               <input
                 className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
                 type="email"
@@ -89,7 +74,7 @@ function Login() {
                 required
               />
 
-              <label className="text-lg font-semibold mb-2">
+              <label className="text-lg font-semibold mt-2">
                 Enter Password
               </label>
               <input
@@ -102,8 +87,7 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-
-              {isSubmitting ? (
+               {isSubmitting ? (
                 <button
                   type="button"
                   disabled
@@ -113,24 +97,26 @@ function Login() {
                 </button>
               ) : (
                 <button
-                  type="submit"
-                  className="text-white mt-10 bg-primary rounded w-full text-xl py-2"
-                >
-                  Sign Up
-                </button>
+                type="submit"
+                className="text-white mt-10 bg-primary rounded w-full text-xl py-2"
+              >
+                Register
+              </button>
               )}
+              
             </form>
             <div className="flex">
-              <p>Create new account ?</p>
-              <Link className="ml-4" to="/signup">
-                Sign Up
+              <p>Already have account ?</p>
+              <Link className="ml-4" to="/login">
+                Log In
               </Link>
             </div>
           </div>
         </section>
       </div>
+      ;
     </div>
   );
 }
 
-export default Login;
+export default JobSeekingForm;
