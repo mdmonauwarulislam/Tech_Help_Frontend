@@ -1,12 +1,24 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiDelete } from "react-icons/fi";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const AddResponsibilityForm = ({ isOpen, onClose }) => {
+const AddResponsibilityForm = ({ isOpen, onClose, responsibilityData }) => {
   const [positionTitle, setPositionTitle] = useState('');
-  const [responsibilities, setResponsibilities] = useState(['',]);
+  const [responsibilities, setResponsibilities] = useState(['']);
   const [certificateLink, setCertificateLink] = useState('');
   const [skillsUsed, setSkillsUsed] = useState('');
+
+  // Effect to populate form if editing
+  useEffect(() => {
+    if (responsibilityData) {
+      setPositionTitle(responsibilityData.title);
+      setResponsibilities(responsibilityData.responsibilities);
+      setCertificateLink(responsibilityData.certificateLink);
+      setSkillsUsed(responsibilityData.skills.join(', ')); 
+    }
+  }, [responsibilityData]);
 
   if (!isOpen) return null;
 
@@ -29,28 +41,66 @@ const AddResponsibilityForm = ({ isOpen, onClose }) => {
     setResponsibilities(newResponsibilities);
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
+
     const responsibilityDetails = {
       title: positionTitle,
       responsibilities,
       certificateLink,
-      skills: skillsUsed.split(',').map(skill => skill.trim()), 
+      skills: skillsUsed.split(',').map(skill => skill.trim()),
     };
-    console.log(responsibilityDetails);
-    // Reset form or handle successful submission
+
+    // Validate input
+    if (responsibilityDetails.skills.length < 2) {
+      toast.error('Please enter at least 2 skills');
+      return;
+    }
+    if (responsibilityDetails.title === '') {
+      toast.error('Please enter the title');
+      return;
+    }
+    if (responsibilityDetails.responsibilities[0] === '') {
+      toast.error('Please enter the responsibilities');
+      return;
+    }
+
+    try {
+      // If responsibilityData is provided, it's an edit, otherwise it's a create
+      if (responsibilityData) {
+        await axios.put(`${import.meta.env.VITE_API_URL}/student/updateResponsibility/${responsibilityData._id}`, responsibilityDetails,{
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        toast.success('Responsibility updated successfully!');
+      } else {
+        await axios.post(`${import.meta.env.VITE_API_URL}/student/addResponsibility`, responsibilityDetails,{
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        toast.success('Responsibility added successfully!');
+      }
+      onClose(); 
+    } catch (error) {
+      toast.error('Error saving responsibility. Please try again.');
+      console.error(error);
+    }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 py-16">
       {/* Background blur */}
       <div
-        className="fixed inset-0 bg-black opacity-50 backdrop-blur-sm"
+        className="fixed inset-0 bg-black opacity-50 backdrop-blur-sm "
         onClick={onClose}
       ></div>
 
       {/* Modal content */}
-      <div className="bg-white p-10 shadow-md rounded-md z-10 relative w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto">
+      <div className="bg-white p-10 shadow-md rounded-md z-10 relative w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto" style={{
+        scrollbarWidth: 'none'
+      }}>
         {/* Close button */}
         <button
           onClick={onClose}
@@ -85,7 +135,7 @@ const AddResponsibilityForm = ({ isOpen, onClose }) => {
           {responsibilities.map((resp, index) => (
             <div key={index} className="relative mb-2">
               <input
-                className="py-2 px-4 pr-10 text-[18px]  rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
+                className="py-2 px-4 pr-10 text-[18px] rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
                 type="text"
                 placeholder={index === 0 ? 'What did you accomplish with this POR?' : 'Type something...'}
                 value={resp}
@@ -117,7 +167,7 @@ const AddResponsibilityForm = ({ isOpen, onClose }) => {
         <div className="mb-5">
           <label className="font-semibold">Certificate Link</label>
           <input
-            className="py-2 px-4 text-[18px]  mt-2 rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
+            className="py-2 px-4 text-[18px] mt-2 rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
             type="text"
             placeholder="Enter certificate link"
             value={certificateLink}
@@ -129,7 +179,7 @@ const AddResponsibilityForm = ({ isOpen, onClose }) => {
         <div className="mb-5">
           <label className="font-semibold">Skills Used (min 2 skills)*</label>
           <input
-            className="py-2 px-4 mt-2 rounded-md text-[18px]  border border-gray-300 outline-none w-full focus:border-techBlue-500"
+            className="py-2 px-4 mt-2 rounded-md text-[18px] border border-gray-300 outline-none w-full focus:border-techBlue-500"
             type="text"
             placeholder="Type Skills Learned (comma separated)"
             value={skillsUsed}
