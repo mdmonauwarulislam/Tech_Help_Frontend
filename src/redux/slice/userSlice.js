@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     isAuthenticated : false,
     user: null,
-    token : null
+    token : null,
+    isProfileUpdated : false,
 }
 const userSlice = createSlice({
     name: "user",
@@ -19,9 +20,12 @@ const userSlice = createSlice({
             state.user = null,
             state.token = null
             localStorage.removeItem('token');
+        },
+        updateProfile : (state) => {
+            state.isProfileUpdated = !state.isProfileUpdated;
         }
     }
 })
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout,updateProfile } = userSlice.actions;
 export default userSlice.reducer;

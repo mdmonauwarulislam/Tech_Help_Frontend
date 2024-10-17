@@ -6,14 +6,13 @@ import AddResponsibilityDeatils from "../../components/dashboard/AddResponsibili
 import AddExperienceDeatils from "../../components/dashboard/AddExperienceDeatils";
 import AddAchievement from "../../components/dashboard/AddAchievement";
 import AddCertifications from "../../components/dashboard/AddCertifications";
-import EducationList from "../../components/dashboard/EducationList";
-import ProjectList from "../../components/dashboard/ProjectList";
 
 import EditProfileForm from "../../components/dashboard/EditProfileForm";
 import axios from "axios";
-
+import { useSelector } from "react-redux";
 
 function UserDashboard() {
+  const isUpdateProfile = useSelector((state) => state.user.isProfileUpdated);
   const [activeLink, setActiveLink] = useState("Education");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [username, setUsername] = useState("");
@@ -43,33 +42,40 @@ function UserDashboard() {
   const handleViewProfile = async () => {
     console.log(localStorage.getItem("token"));
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/student/getstudentdetails`, {
-      headers : {
-      Authorization : `Bearer ${localStorage.getItem("token")}`
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/student/getstudentdetails`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setUsername(response.data.data.username);
+        setProfilePicture(response.data.data.profilePicture);
+        setDomainOfIntrest(response.data.data.domainOfIntrest);
+        setUniversity(response.data.data.university);
+        setGraduationYear(response.data.data.graduationYear);
+        setHometstate(response.data.data.hometstate);
+        setGithubProfile(response.data.data.githubProfile);
+        setLinkedinProfile(response.data.data.linkedinProfile);
       }
-    });
-    console.log("Profile data:", response.data);
-    if(response.status === 200){
-      setUsername(response.data.data.username);
-      setProfilePicture(response.data.data.profilePicture);
-      setDomainOfIntrest(response.data.data.domainOfIntrest);
-      setUniversity(response.data.data.university);
-      setGraduationYear(response.data.data.graduationYear);
-      setHometstate(response.data.data.hometstate);
-      setGithubProfile(response.data.data.githubProfile);
-      setLinkedinProfile(response.data.data.linkedinProfile);
-    }
     } catch (error) {
       console.error(error);
-      console.error("Error fetching profile:", error.response ? error.response.data : error.message);
-
+      console.error(
+        "Error fetching profile:",
+        error.response ? error.response.data : error.message
+      );
     }
-  }
+  };
 
-  
   useEffect(() => {
     handleViewProfile();
-  },[]);
+  }, []);
+  useEffect(() => {
+    handleViewProfile();
+  }, [isUpdateProfile]);
   return (
     <div className="mx-auto  md:flex justify-center p-10 gap-8">
       <div className="w-8/12">
@@ -79,27 +85,33 @@ function UserDashboard() {
               <div className="flex gap-10 ">
                 <div>
                   <img
-                    src={`${import.meta.env.VITE_API_URL}/uploads/${profilePicture}`}
+                    src={`${
+                      import.meta.env.VITE_API_URL
+                    }/uploads/${profilePicture}`}
                     className="h-20 w-20 rounded-full border-4 border-white"
                     alt=""
                   />
                 </div>
                 <div className="">
                   <h1 className="text-2xl font-semibold">{username}</h1>
-                  {
-                    domainOfIntrest.map((domainItem) => (
-                      <p className="text-[18px]" key={domainItem._id}>{domainItem.title}</p>
-                    ))
-                  }
+                  {domainOfIntrest.map((domainItem) => (
+                    <p className="text-[18px]" key={domainItem._id}>
+                      {domainItem.title}
+                    </p>
+                  ))}
                   {/* <p className="text-[18px]">{domainOfIntrest}</p> */}
-                  <p className="text-[16px] pr-6">{university}<span className="ml-4">{graduationYear}</span>
+                  <p className="text-[16px] pr-6">
+                    {university} | 
+                    <span className="ml-2">{graduationYear}</span>
                   </p>
                 </div>
               </div>
               <div className="flex gap-4">
-               
-                <button onClick={openModal} className="px-4 font-semibold py-1 bg-primary rounded text-white">
-                  Edit 
+                <button
+                  onClick={openModal}
+                  className="px-4 font-semibold py-1 bg-primary rounded text-white"
+                >
+                  Edit
                 </button>
                 <EditProfileForm isOpen={isModalOpen} onClose={closeModal} />
                 <button className="px-4 font-semibold py-1 bg-primary rounded text-white">
@@ -107,9 +119,12 @@ function UserDashboard() {
                 </button>
               </div>
             </div>
-            <div className="flex justify-between px-10 overflow-scroll" style={{
-              scrollbarWidth: "none",
-            }}>
+            <div
+              className="flex justify-between px-10 overflow-scroll"
+              style={{
+                scrollbarWidth: "none",
+              }}
+            >
               {links.map((link) => (
                 <p
                   key={link}
@@ -131,50 +146,42 @@ function UserDashboard() {
             <div className="py-4">
               <AddNewEducationDetails />
             </div>
-            <div className="py-4">
-            <EducationList/>
-            </div>
-            
           </div>
         )}
         {activeLink === "Projects" && (
           <div>
             <div className="py-4">
-              <AddProjectDetails/>
+              <AddProjectDetails />
             </div>
-            <div className="py-4">
-              <ProjectList />
-            </div>
-            
           </div>
         )}
         {activeLink === "Position of Responsibility" && (
           <div>
-          <div className="py-4">
-            <AddResponsibilityDeatils/>
+            <div className="py-4">
+              <AddResponsibilityDeatils />
+            </div>
           </div>
-        </div>
         )}
         {activeLink === "Work Experience" && (
           <div>
-          <div className="py-4">
-            <AddExperienceDeatils/>
+            <div className="py-4">
+              <AddExperienceDeatils />
+            </div>
           </div>
-        </div>
         )}
         {activeLink === "Achievements" && (
-         <div>
-         <div className="py-4">
-           <AddAchievement/>
-         </div>
-       </div>
+          <div>
+            <div className="py-4">
+              <AddAchievement />
+            </div>
+          </div>
         )}
         {activeLink === "Certifications" && (
           <div>
-          <div className="py-4">
-            <AddCertifications/>
+            <div className="py-4">
+              <AddCertifications />
+            </div>
           </div>
-        </div>
         )}
       </div>
 

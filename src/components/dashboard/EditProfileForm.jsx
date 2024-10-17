@@ -1,10 +1,13 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose } from "react-icons/io5";
+import { updateProfile } from "../../redux/slice/userSlice";
 
 const EditProfileForm = ({ isOpen, onClose }) => {
+  const dispatch = useDispatch();
   const [profileImage, setProfileImage] = useState(null);
   const [username, setUsername] = useState("");
   const [domainOfIntrest, setDomainOfIntrest] = useState([]);
@@ -77,6 +80,7 @@ const EditProfileForm = ({ isOpen, onClose }) => {
 
       if (response.status === 200) {
         toast.success("Profile updated successfully");
+        dispatch(updateProfile());
         onClose();
       }
     } catch (error) {
@@ -131,7 +135,40 @@ const EditProfileForm = ({ isOpen, onClose }) => {
       }
     }
   };
+
+  //handle View Profile
+  const handleViewProfile = async () => {
+    console.log(localStorage.getItem("token"));
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/student/getstudentdetails`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        setUsername(response.data.data.username);
+        // setProfileImage(response.data.data.profilePicture);
+        setDomainOfIntrest(response.data.data.domainOfIntrest);
+        setUniversity(response.data.data.university);
+        setGraduationYear(response.data.data.graduationYear);
+        setHometown(response.data.data.hometown);
+        setGithubProfile(response.data.data.githubProfile);
+        setLinkedinProfile(response.data.data.linkedinProfile);
+      }
+    } catch (error) {
+      console.error(error);
+      console.error(
+        "Error fetching profile:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
   useEffect(() => {
+    handleViewProfile();
     handleGetDomainOfIntrest();
     handleListSocialPlateform();
   }, []);
@@ -341,6 +378,7 @@ const EditProfileForm = ({ isOpen, onClose }) => {
             <button
               className="py-2 px-4 bg-primary text-white rounded-md"
               onClick={handleUpdateStudentProfile}
+
             >
               Save Details
             </button>
