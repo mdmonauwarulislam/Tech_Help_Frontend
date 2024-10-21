@@ -20,7 +20,6 @@ const AddEducationForm = ({ isOpen, onClose }) => {
     passoutyear: "",
     finalgrade: "",
   });
-
   // handle degree option change
   const handleDegreeChange = (item) => {
     let selectedOptions;

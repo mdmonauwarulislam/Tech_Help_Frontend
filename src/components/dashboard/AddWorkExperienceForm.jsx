@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FiDelete } from "react-icons/fi";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-const AddWorkExperienceForm = ({ isOpen, onClose }) => {
+const AddWorkExperienceForm = ({ isOpen, onClose, workExperienceId }) => {
   const [companyName, setCompanyName] = useState('');
   const [internshipType, setInternshipType] = useState('');
   const [companyLink, setCompanyLink] = useState('');
@@ -11,10 +13,34 @@ const AddWorkExperienceForm = ({ isOpen, onClose }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [currentlyWorking, setCurrentlyWorking] = useState(false);
-  const [projectDetails, setProjectDetails] = useState(['', '', '']); // For project, contribution, features
+  const [projectDetails, setProjectDetails] = useState(['', '', '']);
   const [skillsUsed, setSkillsUsed] = useState('');
   const [certificateLink, setCertificateLink] = useState('');
 
+  useEffect(() => {
+    // Fetch existing work experience data for editing
+    if (workExperienceId) {
+      axios.get(`/api/work-experience/${workExperienceId}`)
+        .then(response => {
+          const data = response.data;
+          setCompanyName(data.companyName);
+          setInternshipType(data.internshipType);
+          setCompanyLink(data.companyLink);
+          setInternshipTitle(data.internshipTitle);
+          setLocation(data.location);
+          setStartDate(data.startDate);
+          setEndDate(data.endDate);
+          setCurrentlyWorking(data.currentlyWorking);
+          setProjectDetails(data.projectDetails);
+          setSkillsUsed(data.skills.join(', '));
+          setCertificateLink(data.certificateLink);
+        })
+        .catch(err => {
+          toast.error('Failed to fetch work experience details');
+          console.error(err);
+        });
+    }
+  }, [workExperienceId]);
 
   if (!isOpen) return null;
 
@@ -33,7 +59,7 @@ const AddWorkExperienceForm = ({ isOpen, onClose }) => {
     setProjectDetails(newProjectDetails);
   };
 
-  const handleSave = (e) => {
+  const handleSave = async (e) => {
     e.preventDefault();
     const workExperienceDetails = {
       companyName,
@@ -45,15 +71,37 @@ const AddWorkExperienceForm = ({ isOpen, onClose }) => {
       endDate,
       currentlyWorking,
       projectDetails,
-      skills: skillsUsed.split(',').map(skill => skill.trim()), 
+      skills: skillsUsed.split(',').map(skill => skill.trim()),
       certificateLink,
     };
-    console.log(workExperienceDetails);
-    // Reset form or handle successful submission
+
+    try {
+      if (workExperienceId) {
+        // Update existing work experience
+        await axios.put(`${import.meta.env.VITE_API_URL}/student/updateWorkExperience/${workExperienceId}`, workExperienceDetails,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        });
+        toast.success('Work experience updated successfully');
+      } else {
+        // Add new work experience
+        await axios.post(`${import.meta.env.VITE_API_URL}/student/addWorkExperience`, workExperienceDetails,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        });
+        toast.success('Work experience added successfully');
+      }
+      onClose(); // Close the modal after saving
+    } catch (error) {
+      toast.error('Failed to save work experience');
+      console.error(error);
+    }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 my-20">
       {/* Background blur */}
       <div
         className="fixed inset-0 bg-black opacity-50 backdrop-blur-sm"
@@ -61,7 +109,9 @@ const AddWorkExperienceForm = ({ isOpen, onClose }) => {
       ></div>
 
       {/* Modal content */}
-      <div className="bg-white p-10 shadow-md rounded-md z-10 relative w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto">
+      <div className="bg-white p-10 shadow-md rounded-md z-10 relative w-11/12 md:w-2/3 lg:w-1/2 max-h-screen overflow-y-auto" style={{
+        scrollbarWidth: 'none'
+      }}>
         {/* Close button */}
         <button
           onClick={onClose}
@@ -209,39 +259,36 @@ const AddWorkExperienceForm = ({ isOpen, onClose }) => {
               <input
                 className="py-2 px-4 pr-10 rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
                 type="text"
-                placeholder={index === 0 ? 'Enter details of project' : index === 1 ? 'Enter your contribution' : 'Enter details of features'}
+                placeholder={`Describe project ${index + 1}`}
                 value={detail}
                 onChange={(e) => handleProjectChange(index, e.target.value)}
                 required
               />
-              {/* Delete icon */}
-              {index >= 3 && (
-                <button
-                  type="button"
-                  onClick={() => deleteProjectPoint(index)}
-                  className="absolute text-2xl right-4 top-1/2 transform -translate-y-1/2 text-gray-500"
-                >
-                  <FiDelete />
-                </button>
-              )}
+              <FiDelete
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-red-500"
+                onClick={() => deleteProjectPoint(index)}
+              />
             </div>
           ))}
           <button
-            type="button"
+            className="text-techBlue-600 hover:text-techBlue-800"
             onClick={addNewProjectPoint}
-            className="mt-3 text-gray-700 border-2 w-full py-2 rounded-md font-semibold"
+            type="button"
           >
-            + New point
+            + Add Project Point
           </button>
         </div>
 
         {/* Skills Used */}
         <div className="mb-5">
-          <label className="font-semibold">Skills Used (min 3 skills)*</label>
+          <label className="font-semibold" htmlFor="skillsUsed">
+            Skills Used (comma separated)*
+          </label>
           <input
-            className="py-2 px-4 mt-2 rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
+            className="py-2 px-4 rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
             type="text"
-            placeholder="Type Skills Used (comma separated)"
+            id="skillsUsed"
+            placeholder="Type Skills Used"
             value={skillsUsed}
             onChange={(e) => setSkillsUsed(e.target.value)}
             required
@@ -250,23 +297,26 @@ const AddWorkExperienceForm = ({ isOpen, onClose }) => {
 
         {/* Certificate Link */}
         <div className="mb-5">
-          <label className="font-semibold">Certificate Link (Optional)</label>
+          <label className="font-semibold" htmlFor="certificateLink">
+            Certificate Link (Optional)
+          </label>
           <input
-            className="py-2 px-4 mt-2 rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
+            className="py-2 px-4 rounded-md border border-gray-300 outline-none w-full focus:border-techBlue-500"
             type="text"
-            placeholder="Certificate/ LOR link"
+            id="certificateLink"
+            placeholder="Enter Certificate Link"
             value={certificateLink}
             onChange={(e) => setCertificateLink(e.target.value)}
           />
         </div>
-        {/* Save and Cancel Buttons */}
-        <div className="pt-5 gap-10 flex justify-end">
-          <button onClick={onClose} className="text-gray-500">Cancel</button>
+
+        {/* Save Button */}
+        <div className="flex justify-end">
           <button
+            className="bg-techBlue-600 text-white px-5 py-2 rounded-md hover:bg-techBlue-700"
             onClick={handleSave}
-            className="bg-primary text-white px-4 py-2 rounded hover:bg-techBlue-600 focus:outline-none"
           >
-            Save Details
+            {workExperienceId ? 'Update' : 'Save'}
           </button>
         </div>
       </div>

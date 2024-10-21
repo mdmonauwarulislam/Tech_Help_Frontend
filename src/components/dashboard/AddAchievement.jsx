@@ -1,24 +1,124 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { MdOutlineModeEdit } from 'react-icons/md';
 
 const AddAchievement = () => {
-  const [isAddingActivity, setIsAddingActivity] = useState(false); 
-  const [extraActivity, setExtraActivity] = useState(''); 
+  const [isAddingActivity, setIsAddingActivity] = useState(false);
+  const [extraActivity, setExtraActivity] = useState('');
+  const [achievements, setAchievements] = useState([]); 
+  const [selectedAchievement, setSelectedAchievement] = useState(null); 
+  const [isEditing, setIsEditing] = useState(false);
 
+  // Open input field for adding a new achievement
   const openInputField = () => {
     setIsAddingActivity(true);
+    setIsEditing(false); 
+    setExtraActivity('');
   };
 
-  const handleAddActivity = () => {
-    console.log('Added Activity:', extraActivity);
+  // Handle adding or updating an achievement
+  const handleAddActivity = async () => {
+    try {
+      if (isEditing && selectedAchievement) {
+        // Update achievement
+        const response = await axios.put(
+          `${import.meta.env.VITE_API_URL}/student/updateAchievement/${selectedAchievement._id}`,
+          { activity: extraActivity },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+        if (response.status === 200) {
+          toast.success('Achievement updated successfully');
+        }
+      } else {
+        // Add achievement
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/student/addAchievement`,
+          { activity: extraActivity },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+        if (response.status === 201) {
+          toast.success('Achievement added successfully');
+        }
+      }
+
+      getAchievements(); 
+      setIsAddingActivity(false);
+      setExtraActivity('');
+      setIsEditing(false);
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to add/update achievement');
+    }
+  };
+
+  // Fetch all achievements
+  const getAchievements = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/student/getAchievements`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      setAchievements(response.data.data);
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to load achievements');
+    }
+  };
+
+  // Handle deleting an achievement
+  const handleDeleteAchievement = async (achievementId) => {
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}/student/deleteAchievement/${achievementId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success('Achievement deleted successfully');
+        getAchievements(); 
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error('Failed to delete achievement');
+    }
+  };
+
+  // Handle editing an achievement
+  const handleEditAchievement = (achievement) => {
+    setIsEditing(true);
+    setIsAddingActivity(true);
+    setExtraActivity(achievement.title); 
+    setSelectedAchievement(achievement);
+  };
+
+  // Handle cancel action
+  const handleCancel = () => {
     setIsAddingActivity(false);
+    setIsEditing(false);
     setExtraActivity(''); 
   };
 
-  const handleCancel = () => {
-    setIsAddingActivity(false);
-    setExtraActivity(''); // Reset input on cancel
-  };
+  // Fetch achievements on component mount
+  useEffect(() => {
+    getAchievements();
+  }, []);
 
   return (
     <>
@@ -28,7 +128,9 @@ const AddAchievement = () => {
             <FaFileAlt size={30} />
           </div>
           <div>
-            <div className="text-lg font-semibold">Add Achievements/ Extracurricular Activity</div>
+            <div className="text-lg font-semibold">
+              Add Achievements/ Extracurricular Activity
+            </div>
             <div className="text-sm text-gray-500">
               Add your achievements of Hackathons, NGO services, Exam ranks, Clubs, etc.
             </div>
@@ -43,6 +145,7 @@ const AddAchievement = () => {
         </button>
       </div>
 
+      {/* Input form for adding/editing achievements */}
       {isAddingActivity && (
         <div className="mt-4 p-4 border border-gray-300 rounded-md shadow-md">
           <input
@@ -63,11 +166,44 @@ const AddAchievement = () => {
               onClick={handleAddActivity}
               className="bg-primary text-white px-4 py-2 rounded hover:bg-techBlue-600 focus:outline-none"
             >
-              Add
+              {isEditing ? 'Update' : 'Add'}
             </button>
           </div>
         </div>
       )}
+
+      {/* List of all achievements */}
+      <div className="mt-5">
+        {achievements.length > 0 ? (
+          achievements.map((achievement) => (
+            <div
+              key={achievement._id}
+              className="flex items-center justify-between px-10 py-5 border rounded-md  border-gray-300"
+            >
+              <div className='text-xl'>{achievement.activity}</div>
+              <div className='flex gap-2'>
+                <button
+                  onClick={() => handleEditAchievement(achievement)}
+                  className="py-1 px-3 border-2 gap-1 items-center flex border-primary rounded-md text-primary text-center"
+                >
+                  <MdOutlineModeEdit size={20} className="inline" />
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDeleteAchievement(achievement._id)}
+                  className="py-1 px-3 border-2 gap-1 items-center flex border-red-500 rounded-md text-red-500 text-center"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="text-gray-500 text-center mt-5">
+            No achievements added yet.
+          </div>
+        )}
+      </div>
     </>
   );
 };
