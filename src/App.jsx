@@ -13,6 +13,7 @@ import UserDashboard from './pages/DashBoard/UserDashboard';
 import EditProfileFrom from './components/dashboard/EditProfileForm';
 import JobSeekingForm from './components/JobSeekingForm';
 import RecuiterRegisterForm from './components/RecuiterRegisterForm';
+import Blog from './pages/Blog';
 
 
 
@@ -34,8 +35,7 @@ function App() {
               <Route path="/userdashboard/edit-profile" element={<EditProfileFrom/>}/>
               <Route path="/signup/user-register" element={<JobSeekingForm/>}/>
               <Route path="/signup/employee-register" element={<RecuiterRegisterForm/>}/>
-              
-              
+              <Route path="/blog" element={<Blog />} />
             </Routes>
           </main>
         </div>
