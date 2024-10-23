@@ -1,6 +1,5 @@
 import { useState } from "react";
-<<<<<<< HEAD
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import {
   FaUserCircle,
   FaCog,
@@ -8,10 +7,6 @@ import {
   FaLifeRing,
   FaSignOutAlt,
 } from "react-icons/fa";
-=======
-import { Link, useNavigate } from "react-router-dom";
-import { FaUserCircle, FaCog, FaEnvelope, FaLifeRing, FaSignOutAlt } from "react-icons/fa";
->>>>>>> 1650c1f (add edit skill)
 import { BiChevronDown } from "react-icons/bi";
 import { SiHelpscout } from "react-icons/si";
 
@@ -56,7 +51,6 @@ function ProfileMenu() {
       {isMenuOpen && (
         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
           <ul className="p-1">
-<<<<<<< HEAD
             {profileMenuItems.map(({ label, icon: Icon, to }) => (
               <li
                 key={label}
@@ -68,34 +62,14 @@ function ProfileMenu() {
                     className="flex items-center gap-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
-=======
-            {profileMenuItems.map(({ label, icon: Icon, to, signout }) => (
-              <li
-                key={label}
-                className="flex items-center gap-2 p-2 hover:bg-gray-100 cursor-pointer"
-                onClick={() => {
-                  if (signout) {
-                    handleSignOut(); // Trigger sign-out when this item is clicked
-                  } else {
-                    setIsMenuOpen(false);
-                  }
-                }}
-              >
-                {to ? (
-                  <Link to={to} className="flex items-center gap-2">
->>>>>>> 1650c1f (add edit skill)
                     <Icon className="w-4 h-4 text-gray-600" />
                     <span className="text-sm font-normal">{label}</span>
                   </Link>
                 ) : (
-<<<<<<< HEAD
                   <div
                     onClick={() => setIsMenuOpen(false)}
                     className="flex items-center gap-2"
                   >
-=======
-                  <div className="flex items-center gap-2">
->>>>>>> 1650c1f (add edit skill)
                     <Icon className="w-4 h-4 text-gray-600" />
                     <span className="text-sm font-normal">{label}</span>
                   </div>
@@ -115,17 +89,12 @@ export function Navbar() {
     <nav className="mx-auto w-full p-2 bg-white shadow-lg">
       <div className="flex items-center justify-between text-blue-gray-900 md:w-10/12 w-11/12 mx-auto">
         {/* Logo */}
-<<<<<<< HEAD
         <Link
           to="/"
           className="mr-4 ml-2 text-primary cursor-pointer py-2 font-bold text-2xl md:text-3xl xl:text-4xl "
         >
           <SiHelpscout className="inline mr-3 text-center" />
           Tech Help
-=======
-        <Link to="/" className="mr-4 ml-2 text-primary cursor-pointer py-2 font-bold text-2xl md:text-3xl xl:text-4xl ">
-          <SiHelpscout className="inline mr-3 text-center" />Tech Help
->>>>>>> 1650c1f (add edit skill)
         </Link>
 
         {/* Profile Menu */}
