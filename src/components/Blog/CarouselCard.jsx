@@ -12,7 +12,6 @@ const CarouselCard = ({
 }) => {
   return (
     <div className="flex justify-center items-center gap-8 bg-deep-orange-50 rounded-lg">
-      {/* image  */}
       <div className="card rounded-lg">
         <div className="image">
           <img src={blogImage} className="rounded-lg" alt="" />
@@ -48,5 +47,4 @@ const CarouselCard = ({
     </div>
   );
 };
-
 export default CarouselCard;

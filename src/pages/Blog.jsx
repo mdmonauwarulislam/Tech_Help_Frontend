@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Carousel } from "@material-tailwind/react"; 
-import CarouselCard from "../components/CarouselCard";
+import CarouselCard from "../components/Blog/CarouselCard";
 import C1 from "../assets/C1.webp";
 import C2 from "../assets/C2.webp";
 import C3 from "../assets/C3.webp";
