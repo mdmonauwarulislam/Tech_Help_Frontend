@@ -9,7 +9,7 @@ const AddEducationForm = ({ isOpen, onClose }) => {
   const [college, setCollege] = useState({
     university: "",
     studyfield: "",
-    degree: [],
+    degree:[],
     grade: "",
     startyear: "",
     endyear: "",
@@ -207,9 +207,13 @@ const AddEducationForm = ({ isOpen, onClose }) => {
                     onChange={(e) => handleDegreeChange(e.target.value)}
                     required
                   >
+                     <option  >
+                         select the degree
+                        </option>
                     {Array.isArray(listOfdegree) &&
                       listOfdegree.map((item, index) => (
-                        <option key={index} value={item._id}>
+                       
+                          <option key={index} value={item._id}>
                           {item.degree}
                         </option>
                       ))}

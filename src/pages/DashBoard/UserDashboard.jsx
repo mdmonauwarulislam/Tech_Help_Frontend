@@ -6,8 +6,10 @@ import AddResponsibilityDeatils from "../../components/dashboard/AddResponsibili
 import AddExperienceDeatils from "../../components/dashboard/AddExperienceDeatils";
 import AddAchievement from "../../components/dashboard/AddAchievement";
 import AddCertifications from "../../components/dashboard/AddCertifications";
+import { FaLinkedin, FaGithub } from "react-icons/fa";
 
 import EditProfileForm from "../../components/dashboard/EditProfileForm";
+import EditSkills from "../../components/dashboard/EditSkills";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
@@ -39,8 +41,8 @@ function UserDashboard() {
   const handleLinkClick = (link) => {
     setActiveLink(link);
   };
+
   const handleViewProfile = async () => {
-    console.log(localStorage.getItem("token"));
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}/student/getstudentdetails`,
@@ -63,10 +65,6 @@ function UserDashboard() {
       }
     } catch (error) {
       console.error(error);
-      console.error(
-        "Error fetching profile:",
-        error.response ? error.response.data : error.message
-      );
     }
   };
 
@@ -76,6 +74,7 @@ function UserDashboard() {
   useEffect(() => {
     handleViewProfile();
   }, [isUpdateProfile]);
+
   return (
     <div className="mx-auto  md:flex justify-center p-10 gap-8">
       <div className="w-8/12">
@@ -99,9 +98,8 @@ function UserDashboard() {
                       {domainItem.title}
                     </p>
                   ))}
-                  {/* <p className="text-[18px]">{domainOfIntrest}</p> */}
                   <p className="text-[16px] pr-6">
-                    {university} | 
+                    {university} |{" "}
                     <span className="ml-2">{graduationYear}</span>
                   </p>
                 </div>
@@ -185,8 +183,65 @@ function UserDashboard() {
         )}
       </div>
 
-      <div className="w-4/12 ">
-        <div className="border-2 rounded-xl h-10"></div>
+      <div className="w-4/12">
+        {/* social media */}
+        <div className="border-2 rounded-md p-5">
+          <div className="flex justify-between items-end">
+            <h1 className="font-semibold text-xl">Social</h1>
+            <button
+              onClick={openModal}
+              className="px-4 font-semibold py-1 border border-primary rounded text-primary cursor-pointer"
+            >
+              Edit
+            </button>
+            <EditProfileForm isOpen={isModalOpen} onClose={closeModal} />
+          </div>
+          <div className="flex gap-4 mt-5">
+            <a href={linkedinProfile} target="_blank" rel="noopener noreferrer">
+              <FaLinkedin
+                size={35}
+                className="text-slate-500 hover:text-blue-500 p-1 rounded-full hover:bg-blue-100 cursor-pointer"
+              />
+            </a>
+            <a href={githubProfile} target="_blank" rel="noopener noreferrer">
+              <FaGithub
+                size={35}
+                className="text-slate-500 hover:text-blue-500 p-1 rounded-full hover:bg-blue-100 cursor-pointer"
+              />
+            </a>
+          </div>
+        </div>
+
+        {/* tagline && skills */}
+        <div className="border-2 rounded-md p-5 mt-5">
+          <div className="flex justify-between items-end">
+            <h1 className="font-semibold text-xl">Tagline</h1>
+            <button
+              onClick={openModal}
+              className="px-4 font-semibold py-1 border border-primary rounded text-primary cursor-pointer"
+            >
+              Edit
+            </button>
+            <EditSkills isSkillFormOpen={isModalOpen} onSkillFormClose={closeModal} />
+          </div>
+          <p className="my-5">Full Stack Developer</p>
+          <hr />
+          <h1 className="font-semibold text-xl mt-5">Skills</h1>
+          <div className="flex gap-2 mt-5">
+            <button className="bg-slate-200 px-4 py-2 rounded-full">
+              React
+            </button>
+            <button className="bg-slate-200 px-4 py-2 rounded-full">
+              Node
+            </button>
+            <button className="bg-slate-200  px-4 py-2 rounded-full">
+              Express
+            </button>
+            <button className="bg-slate-200  px-4 py-2 rounded-full">
+              MongoDB
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -46,7 +46,7 @@ const AddCertificationForm = ({ isOpen, onClose, certificationId }) => {
       completionMonth,
       completionYear,
       certificationLink,
-      skills: skillsUsed.split(",").map((skill) => skill.trim()), // Split skills by commas
+      skills: skillsUsed.split(",").map((skill) => skill.trim()),
     };
 
     try {

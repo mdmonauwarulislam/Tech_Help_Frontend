@@ -10,6 +10,8 @@ const AddAchievement = () => {
   const [achievements, setAchievements] = useState([]); 
   const [selectedAchievement, setSelectedAchievement] = useState(null); 
   const [isEditing, setIsEditing] = useState(false);
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false); // State for delete confirmation modal
+  const [achievementToDelete, setAchievementToDelete] = useState(null); // State to store selected achievement for deletion
 
   // Open input field for adding a new achievement
   const openInputField = () => {
@@ -79,11 +81,17 @@ const AddAchievement = () => {
     }
   };
 
-  // Handle deleting an achievement
-  const handleDeleteAchievement = async (achievementId) => {
+  // Open confirmation modal to delete achievement
+  const handleDeleteAchievement = (achievement) => {
+    setAchievementToDelete(achievement);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  // Confirm deletion of achievement
+  const confirmDelete = async () => {
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/student/deleteAchievement/${achievementId}`,
+        `${import.meta.env.VITE_API_URL}/student/deleteAchievement/${achievementToDelete._id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -92,8 +100,10 @@ const AddAchievement = () => {
       );
       if (response.status === 200) {
         toast.success('Achievement deleted successfully');
-        getAchievements(); 
+        getAchievements();
       }
+      setIsDeleteConfirmOpen(false);
+      setAchievementToDelete(null);
     } catch (error) {
       console.log(error);
       toast.error('Failed to delete achievement');
@@ -104,7 +114,7 @@ const AddAchievement = () => {
   const handleEditAchievement = (achievement) => {
     setIsEditing(true);
     setIsAddingActivity(true);
-    setExtraActivity(achievement.title); 
+    setExtraActivity(achievement.activity); 
     setSelectedAchievement(achievement);
   };
 
@@ -113,6 +123,12 @@ const AddAchievement = () => {
     setIsAddingActivity(false);
     setIsEditing(false);
     setExtraActivity(''); 
+  };
+
+  // Cancel the delete action
+  const cancelDelete = () => {
+    setIsDeleteConfirmOpen(false);
+    setAchievementToDelete(null);
   };
 
   // Fetch achievements on component mount
@@ -178,7 +194,7 @@ const AddAchievement = () => {
           achievements.map((achievement) => (
             <div
               key={achievement._id}
-              className="flex items-center justify-between px-10 py-5 border rounded-md  border-gray-300"
+              className="flex items-center mt-5 justify-between px-10 py-5 border rounded-md  border-gray-300"
             >
               <div className='text-xl'>{achievement.activity}</div>
               <div className='flex gap-2'>
@@ -190,7 +206,7 @@ const AddAchievement = () => {
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDeleteAchievement(achievement._id)}
+                  onClick={() => handleDeleteAchievement(achievement)}
                   className="py-1 px-3 border-2 gap-1 items-center flex border-red-500 rounded-md text-red-500 text-center"
                 >
                   Delete
@@ -204,6 +220,34 @@ const AddAchievement = () => {
           </div>
         )}
       </div>
+
+      {/* Confirmation Modal for Deletion */}
+      {isDeleteConfirmOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div
+            className="fixed inset-0 bg-black opacity-50"
+            onClick={cancelDelete}
+          ></div>
+          <div className="bg-white p-5 rounded-md z-10 relative">
+            <h4 className="text-lg font-bold mb-4">Confirm Deletion</h4>
+            <p>Are you sure you want to delete this achievement?</p>
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -1,22 +1,27 @@
 import { useState, useEffect } from 'react';
 import { FaFileAlt } from 'react-icons/fa';
-import AddCertificationForm from './AddCertificationForm';
+import AddCertificationForm from './AddCertificationForm'; // Your form component
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { MdOutlineModeEdit } from 'react-icons/md';
 
 const AddCertifications = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [certifications, setCertifications] = useState([]); // State to hold certifications data
-  const [selectedCertificationId, setSelectedCertificationId] = useState(null); // For editing
+  const [selectedCertification, setSelectedCertification] = useState(null); // For editing
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false); // State for delete confirmation modal
+  const [certificationToDelete, setCertificationToDelete] = useState(null); // Certification to be deleted
 
-  const openModal = (certificationId = null) => {
-    setSelectedCertificationId(certificationId); // If editing, pass the ID
+  // Open modal for adding or editing certifications
+  const openModal = (certification = null) => {
+    setSelectedCertification(certification); // Pass the certification if editing
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedCertificationId(null); // Reset the selected certification after closing the modal
+    setSelectedCertification(null); // Reset after closing the modal
   };
 
   // Fetch all certifications
@@ -26,25 +31,45 @@ const AddCertifications = () => {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-      }); 
-      setCertifications(response.data.data); 
+      });
+      setCertifications(response.data.data);
     } catch (error) {
       console.error('Error fetching certifications:', error);
+      toast.error('Failed to load certifications');
     }
   };
 
   useEffect(() => {
-    fetchCertifications(); 
+    fetchCertifications();
   }, []);
 
   // Function to delete a certification
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/student/deleteCertification/${id}`); 
-      setCertifications(certifications.filter(cert => cert._id !== id));
+      await axios.delete(`${import.meta.env.VITE_API_URL}/student/deleteCertification/${certificationToDelete._id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      setCertifications(certifications.filter(cert => cert._id !== certificationToDelete._id));
+      toast.success('Certification deleted successfully');
+      setIsDeleteConfirmOpen(false); // Close the confirmation modal
     } catch (error) {
       console.error('Error deleting certification:', error);
+      toast.error('Failed to delete certification');
     }
+  };
+
+  // Open the delete confirmation modal
+  const openDeleteConfirmModal = (certification) => {
+    setCertificationToDelete(certification);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  // Close the delete confirmation modal
+  const closeDeleteConfirmModal = () => {
+    setCertificationToDelete(null);
+    setIsDeleteConfirmOpen(false);
   };
 
   return (
@@ -73,13 +98,26 @@ const AddCertifications = () => {
         {certifications.length > 0 ? (
           <ul>
             {certifications.map(cert => (
-              <li key={cert._id} className="mb-4 p-4 border border-gray-300 rounded-md shadow-sm">
+              <li key={cert._id} className="mb-4 p-4 border border-gray-300 rounded-md shadow-md">
                 <div className="flex justify-between items-start">
                   <div>
                     <h4 className="text-lg font-semibold">{cert.title}</h4>
                     <p className="text-sm text-gray-600">Completed: {cert.completionMonth} {cert.completionYear}</p>
-                    <p className="text-sm text-gray-600">Skills: {cert.skills.join(', ')}</p>
-                    <ul className="list-disc list-inside mt-2">
+                    <div className="mt-4 flex space-x-2 text-gray-500">
+              {cert.skills && cert.skills.length > 0 ? (
+                cert.skills.map((skill, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-gray-100 rounded-full"
+                  >
+                    {skill}
+                  </span>
+                ))
+              ) : (
+                <span>No skills specified.</span>
+              )}
+            </div>
+                    <ul className="list-disc list-inside text-gray-500 mt-2">
                       {cert.descriptionPoints.map((point, index) => (
                         <li key={index}>{point}</li>
                       ))}
@@ -97,14 +135,15 @@ const AddCertifications = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <button
-                      onClick={() => openModal(cert._id)} 
-                      className="text-blue-500 hover:text-blue-700"
-                    >
+                      onClick={() => openModal(cert)} // Open modal with the certification for editing
+                      className="py-1 px-3 border-2 gap-1 items-center flex border-primary rounded-md text-primary text-center"
+                      >
+                        <MdOutlineModeEdit size={20} className="inline" />
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(cert._id)}
-                      className="text-red-500 hover:text-red-700"
+                      onClick={() => openDeleteConfirmModal(cert)} 
+                      className="py-1 px-3 border-2 gap-1 items-center flex border-red-500 rounded-md text-red-500 text-center"
                     >
                       Delete
                     </button>
@@ -118,12 +157,37 @@ const AddCertifications = () => {
         )}
       </div>
 
-      {/* Render the modal */}
+      {/* Render the certification form modal */}
       <AddCertificationForm
         isOpen={isModalOpen}
         onClose={closeModal}
-        certificationId={selectedCertificationId} // Pass the certification ID to the modal for editing
+        certification={selectedCertification} // Pass the selected certification for editing
       />
+
+      {/* Render the delete confirmation modal */}
+      {isDeleteConfirmOpen && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black opacity-50" onClick={closeDeleteConfirmModal}></div>
+          <div className="bg-white p-5 rounded-md z-10 relative">
+            <h4 className="text-lg font-bold mb-4">Confirm Deletion</h4>
+            <p>Are you sure you want to delete this certification?</p>
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                onClick={closeDeleteConfirmModal}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

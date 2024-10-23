@@ -74,7 +74,7 @@ function Login() {
         <section className="bg-white shadow-2xl p-6 md:p-10 rounded-md w-full max-w-md ">
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-              Sign Up
+              Log In
             </h2>
             <form className="flex flex-col" onSubmit={handleSubmit}>
               <label className="text-lg font-semibold mb-2">Enter Email</label>
@@ -116,7 +116,7 @@ function Login() {
                   type="submit"
                   className="text-white mt-10 bg-primary rounded w-full text-xl py-2"
                 >
-                  Sign Up
+                  Log In
                 </button>
               )}
             </form>

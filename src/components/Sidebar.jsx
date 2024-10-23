@@ -17,11 +17,15 @@ const Sidebar = () => {
 
   return (
     // Hide the sidebar on mobile devices
+<<<<<<< HEAD
     <div
       className={`flex flex-col h-screen text-primary border-primary border-r-2 transition-transform ${
         open ? "w-64" : "w-16"
       } hidden md:flex`}
     >
+=======
+    <div className={`flex flex-col text-primary border-primary border-r-2 transition-transform ${open ? 'w-64' : 'w-16'} hidden md:flex`}>
+>>>>>>> 1650c1f (add edit skill)
       <button onClick={toggleSidebar} className="p-4 flex items-center">
         {open ? (
           <MdClose className="text-3xl" />
