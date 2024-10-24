@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 function UserDashboard() {
   const isUpdateProfile = useSelector((state) => state.user.isProfileUpdated);
   const [activeLink, setActiveLink] = useState("Education");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
   const [username, setUsername] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
   const [domainOfIntrest, setDomainOfIntrest] = useState([]);
@@ -26,8 +26,9 @@ function UserDashboard() {
   const [githubProfile, setGithubProfile] = useState("");
   const [linkedinProfile, setLinkedinProfile] = useState("");
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openProfileModal = () => setActiveModal("profile");
+  const openSkillsModal = () => setActiveModal("skills");
+  const closeModal = () => setActiveModal(null);
 
   const links = [
     "Education",
@@ -71,12 +72,13 @@ function UserDashboard() {
   useEffect(() => {
     handleViewProfile();
   }, []);
+  
   useEffect(() => {
     handleViewProfile();
   }, [isUpdateProfile]);
 
   return (
-    <div className="mx-auto  md:flex justify-center py-10 gap-8 md:w-10/12">
+    <div className="mx-auto md:flex justify-center p-10 gap-8">
       <div className="w-8/12">
         <div className="border-2 rounded-xl">
           <div className="">
@@ -106,12 +108,11 @@ function UserDashboard() {
               </div>
               <div className="flex gap-4">
                 <button
-                  onClick={openModal}
+                  onClick={openProfileModal}
                   className="px-4 font-semibold py-1 bg-primary rounded text-white"
                 >
                   Edit
                 </button>
-                <EditProfileForm isOpen={isModalOpen} onClose={closeModal} />
                 <button className="px-4 font-semibold py-1 bg-primary rounded text-white">
                   Your resume
                 </button>
@@ -119,9 +120,7 @@ function UserDashboard() {
             </div>
             <div
               className="flex justify-between px-10 overflow-scroll"
-              style={{
-                scrollbarWidth: "none",
-              }}
+              style={{ scrollbarWidth: "none" }}
             >
               {links.map((link) => (
                 <p
@@ -189,12 +188,11 @@ function UserDashboard() {
           <div className="flex justify-between items-end">
             <h1 className="font-semibold text-xl">Social</h1>
             <button
-              onClick={openModal}
+              onClick={openProfileModal}
               className="px-4 font-semibold py-1 border border-primary rounded text-primary cursor-pointer"
             >
               Edit
             </button>
-            <EditProfileForm isOpen={isModalOpen} onClose={closeModal} />
           </div>
           <div className="flex gap-4 mt-5">
             <a href={linkedinProfile} target="_blank" rel="noopener noreferrer">
@@ -213,35 +211,27 @@ function UserDashboard() {
         </div>
 
         {/* tagline && skills */}
-        <div className="border-2 rounded-md p-5 mt-5">
-          <div className="flex justify-between items-end">
-            <h1 className="font-semibold text-xl">Tagline</h1>
+        <div className="border-2 rounded-md p-5 mt-8">
+          <div className="flex justify-between items-center">
+            <h1 className="font-semibold text-xl">Skills</h1>
             <button
-              onClick={openModal}
+              onClick={openSkillsModal}
               className="px-4 font-semibold py-1 border border-primary rounded text-primary cursor-pointer"
             >
               Edit
             </button>
-            <EditSkills isSkillFormOpen={isModalOpen} onSkillFormClose={closeModal} />
           </div>
-          <p className="my-5">Full Stack Developer</p>
-          <hr />
-          <h1 className="font-semibold text-xl mt-5">Skills</h1>
-          <div className="flex gap-2 mt-5">
-            <button className="bg-slate-200 px-4 py-2 rounded-full">
-              React
-            </button>
-            <button className="bg-slate-200 px-4 py-2 rounded-full">
-              Node
-            </button>
-            <button className="bg-slate-200  px-4 py-2 rounded-full">
-              Express
-            </button>
-            <button className="bg-slate-200  px-4 py-2 rounded-full">
-              MongoDB
-            </button>
-          </div>
+          <p className="text-slate-600 mt-4">Skills listed here</p>
         </div>
+
+        {/* Modal for EditProfileForm */}
+        {activeModal === "profile" && (
+          <EditProfileForm isOpen={true} onClose={closeModal} />
+        )}
+        {/* Modal for EditSkills */}
+        {activeModal === "skills" && (
+          <EditSkills isSkillFormOpen={true} onSkillFormClose={closeModal} />
+        )}
       </div>
     </div>
   );
