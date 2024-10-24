@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Carousel } from "@material-tailwind/react"; 
+import React, { useEffect, useState } from "react";
 import CarouselCard from "../components/Blog/CarouselCard";
 import C1 from "../assets/C1.webp";
 import C2 from "../assets/C2.webp";
@@ -58,23 +57,71 @@ const items = [
 ];
 
 const Blog = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isExiting, setIsExiting] = useState(false);
+  const totalItems = items.length;
+
+  
+
+  const handleNextSlide = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % totalItems);
+      setIsExiting(false);
+    }, 500); 
+  };
+
+  const handlePrevSlide = () => {
+    setIsExiting(true);
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+      setIsExiting(false);
+    }, 500); 
+  };
+
+  // Handle autoplay
+  useEffect(() => {
+    const interval = setInterval(() => {
+      handleNextSlide();
+      handlePrevSlide();
+    }, 4000); 
+
+    return () => clearInterval(interval); 
+  }, []);
+
   return (
     <div>
       <div className="flex justify-center items-center py-10">
         <h1 className="text-center text-5xl text-[#000000] font-bold">Trending</h1>
       </div>
-      <div className="carousel px-16">
-      <Carousel
-          transition={{ duration: 2 }}
-          autoplay={true}
-          indicators={true}
+      <div className="relative carousel px-16">
+        <div
+          className={`transition-opacity duration-500 ease-linear flex justify-center ${
+            isExiting ? "opacity-0" : "opacity-100"
+          }`}
         >
-          {items.map((item, index) => (
-            <div key={index} className="flex justify-center">
-              <CarouselCard {...item} />
-            </div>
+          <CarouselCard {...items[currentIndex]} />
+        </div>
+
+        {/* Indicators */}
+        <div className="flex justify-center mt-4">
+          {items.map((_, index) => (
+            <span
+              key={index}
+              className={`h-2 w-2 rounded-full mx-1 cursor-pointer ${
+                currentIndex === index ? "bg-orange-500" : "bg-gray-300"
+              }`}
+              onClick={() => {
+                setIsExiting(true);
+                setTimeout(() => {
+                  setCurrentIndex(index);
+                  setIsExiting(false);
+                }, 500); 
+              }}
+            ></span>
           ))}
-        </Carousel>
+        </div>
+
       </div>
     </div>
   );
