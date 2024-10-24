@@ -61,8 +61,6 @@ const Blog = () => {
   const [isExiting, setIsExiting] = useState(false);
   const totalItems = items.length;
 
-  
-
   const handleNextSlide = () => {
     setIsExiting(true);
     setTimeout(() => {
@@ -71,19 +69,11 @@ const Blog = () => {
     }, 500); 
   };
 
-  const handlePrevSlide = () => {
-    setIsExiting(true);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
-      setIsExiting(false);
-    }, 500); 
-  };
-
   // Handle autoplay
   useEffect(() => {
     const interval = setInterval(() => {
       handleNextSlide();
-      handlePrevSlide();
+
     }, 4000); 
 
     return () => clearInterval(interval); 
