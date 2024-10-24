@@ -160,7 +160,6 @@ const Blog = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       handleNextSlide();
-      handlePrevSlide();
     }, 4000);
 
     return () => clearInterval(interval);
@@ -175,7 +174,7 @@ const Blog = () => {
       </div>
       <div className="relative carousel px-16">
         <div
-          className={`transition-opacity duration-500 ease-linear flex justify-center ${
+          className={`transition duration-500 ease-linear flex justify-center ${
             isExiting ? "opacity-0" : "opacity-100"
           }`}
         >
