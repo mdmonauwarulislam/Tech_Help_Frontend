@@ -1,7 +1,7 @@
 import SignupCard from "../components/SignupCard"; 
 import JobPostImg from "../assets/job-post.svg";
 import JobSeekingImg from "../assets/job-search.svg";
-import bg from "../assets/bg.png"
+import bg from "../assets/backgroud.avif"
 
 const Signup = () => {
   return (
@@ -12,23 +12,27 @@ const Signup = () => {
       alignItems: "center",
     }}>
       <section className="bg-white shadow-2xl p-10 rounded-md ">
-        <div className="flex gap-6 justify-center items-center text-primary">
+        <div className=" md:flex gap-6  justify-center items-center text-primary">
           
-          {/* Job Seeking Card */}
+          <div className="mb-4 md:mb-0">
+            {/* Job Seeking Card */}
           <SignupCard
             imgSrc={JobSeekingImg}
             imgAlt="job-search-img"
             title="Looking for a job?"
             linkTo="/signup/user-register"
           />
+          </div>
 
-          {/* Job Posting Card */}
+          <div>
+            {/* Job Posting Card */}
           <SignupCard
             imgSrc={JobPostImg}
             imgAlt="job-post-img"
             title="Post a job?"
             linkTo="/signup/employee-register"
           />
+          </div>
 
         </div>
       </section>

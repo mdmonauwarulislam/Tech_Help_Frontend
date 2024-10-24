@@ -22,11 +22,11 @@ function App() {
 
   return (
     <Router>
-      <div className="flex flex-col h-screen ">
+      <div className="flex flex-col">
         <Navbar />
         <div className="flex flex-grow">
           {/* <Sidebar /> */}
-          <main className="flex-1 pb-20">
+          <main className="flex-1 ">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={<Signin/>}/>

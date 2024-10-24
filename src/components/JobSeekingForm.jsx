@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import studentImg from "../assets/studentImg.avif";
 
 function JobSeekingForm() {
 
@@ -43,15 +44,23 @@ function JobSeekingForm() {
   };
 
   return (
-    <div>
+    <div className="grid grid-cols-1 md:grid-cols-2">
+      {/* left */}
+      <div className="hidden md:flex flex-col min-h-screen justify-center items-center rounded-r-3xl" style={{
+        backgroundImage: `url(${studentImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}>
+        
+      </div>
       <div className="flex items-center justify-center min-h-screen p-4 md:p-6 text-primary">
-        <section className="bg-white shadow-2xl p-6 md:p-10 rounded-md w-full max-w-md ">
+        <section className="bg-white w-full max-w-md ">
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-              Register for Job Seeking
+            Join Us to Share, Learn, and Shape Your Future.
             </h2>
             <form className="flex flex-col" onSubmit={handleSubmit}>
-            <label className="text-lg font-semibold mt-2">Enter Full Name</label>
+            <label className="text-lg font-medium mb-1 ">Enter Full Name</label>
               <input
                 className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
                 type="name"
@@ -62,7 +71,7 @@ function JobSeekingForm() {
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
-              <label className="text-lg font-semibold mt-2">Enter Email</label>
+              <label className="text-lg font-medium mt-4 mb-1">Enter Email</label>
               <input
                 className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
                 type="email"
@@ -74,7 +83,7 @@ function JobSeekingForm() {
                 required
               />
 
-              <label className="text-lg font-semibold mt-2">
+              <label className="text-lg font-medium mt-4 mb-1">
                 Enter Password
               </label>
               <input
@@ -105,7 +114,7 @@ function JobSeekingForm() {
               )}
               
             </form>
-            <div className="flex">
+            <div className="flex text-lg">
               <p>Already have account ?</p>
               <Link className="ml-4" to="/login">
                 Log In
@@ -114,7 +123,6 @@ function JobSeekingForm() {
           </div>
         </section>
       </div>
-      ;
     </div>
   );
 }

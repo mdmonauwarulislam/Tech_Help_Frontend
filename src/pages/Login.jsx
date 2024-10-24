@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/slice/userSlice";
+import plusImage from "../assets/loginImg.png";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -58,26 +59,25 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 py-10">
+    <div className=" grid grid-cols-1 md:grid-cols-2">
       {/* left */}
-      <div className="hidden md:flex flex-col justify-center items-center bg-gradient-to-tr from-techBlue-600 via-blue-500 to-techBlue-500 rounded-r-3xl">
-        <h1 className="text-white text-4xl md:text-5xl font-bold mb-4 text-center">
-          Welcome back to Tech Help
-        </h1>
-        <p className="text-white text-lg md:text-xl text-center">
-          Your gateway to mentorship, blogs, and jobs.
-        </p>
+      <div className="hidden md:flex flex-col min-h-screen justify-center items-center rounded-r-3xl" style={{
+        backgroundImage: `url(${plusImage})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}>
+        
       </div>
 
       {/* right */}
       <div className="flex items-center justify-center min-h-screen p-4 md:p-6 text-primary">
-        <section className="bg-white shadow-2xl p-6 md:p-10 rounded-md w-full max-w-md ">
+        <section className="bg-white w-full max-w-md ">
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-              Log In
+            Unlock Opportunities, Connect, Learn, and Grow.
             </h2>
             <form className="flex flex-col" onSubmit={handleSubmit}>
-              <label className="text-lg font-semibold mb-2">Enter Email</label>
+              <label className="text-lg font-medium mb-1">Enter Email</label>
               <input
                 className="py-2 px-4 rounded-md border border-gray-300 outline-none focus:border-techBlue-500"
                 type="email"
@@ -89,7 +89,7 @@ function Login() {
                 required
               />
 
-              <label className="text-lg font-semibold mb-2">
+              <label className="text-lg font-medium mt-4 mb-1">
                 Enter Password
               </label>
               <input
@@ -120,7 +120,7 @@ function Login() {
                 </button>
               )}
             </form>
-            <div className="flex">
+            <div className="flex text-lg">
               <p>Create new account ?</p>
               <Link className="ml-4" to="/signup">
                 Sign Up

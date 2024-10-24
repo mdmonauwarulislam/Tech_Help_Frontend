@@ -66,7 +66,7 @@ const ProfileMenu = ({ closeMenus }) => {
         <>
           <button
             onClick={toggleMenu}
-            className="flex items-center gap-1 p-2 border rounded-full text-gray-700 hover:bg-gray-200"
+            className="flex items-center gap-1 p-2 border rounded-full hover:bg-gray-200 "
           >
             <img
               className="w-8 h-8 rounded-full border border-gray-900"
