@@ -25,7 +25,7 @@ function App() {
       <div className="flex flex-col h-screen ">
         <Navbar />
         <div className="flex flex-grow">
-          <Sidebar />
+          {/* <Sidebar /> */}
           <main className="flex-1 pb-20">
             <Routes>
               <Route path="/" element={<Home />} />

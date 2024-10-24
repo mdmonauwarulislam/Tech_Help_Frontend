@@ -76,7 +76,7 @@ function UserDashboard() {
   }, [isUpdateProfile]);
 
   return (
-    <div className="mx-auto  md:flex justify-center p-10 gap-8">
+    <div className="mx-auto  md:flex justify-center py-10 gap-8 md:w-10/12">
       <div className="w-8/12">
         <div className="border-2 rounded-xl">
           <div className="">
