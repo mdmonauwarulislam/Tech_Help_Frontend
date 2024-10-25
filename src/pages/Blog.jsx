@@ -11,6 +11,9 @@ import BlogCard from "../components/Blog/BlogCard";
 import CategoryBlogPost from "../components/Blog/CategoryBlogPost";
 import SubscribeCard from "../components/Blog/SubscribeCard";
 import Footer from "../components/Blog/Footer";
+import PopularCarouselCard from "../components/Blog/PopularCarouselCard";
+
+
 const items = [
   {
     blogImage: C1,
@@ -213,20 +216,20 @@ const Blog = () => {
         {/* most popular post  */}
         <div className="flex justify-center items-center py-10">
           <h1 className="text-center text-5xl text-[#000000] font-bold">
-            Most Popular
+            Most Popular Posts
           </h1>
         </div>
 
         {/* blog carousel 2 */}
-        <div className="carousel px-16 py-10">
+        <div className="carousel px-16 py-10 bg-deep-orange-50 rounded-lg">
           <Carousel
             transition={{ duration: 2 }}
-            autoplay={true}
+            autoplay={false}
             indicators={true}
           >
             {items.map((item, index) => (
               <div key={index} className="flex justify-center">
-                <CarouselCard {...item} />
+                <PopularCarouselCard {...item} />
               </div>
             ))}
           </Carousel>

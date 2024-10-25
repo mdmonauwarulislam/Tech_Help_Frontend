@@ -56,18 +56,18 @@ const BlogCard = ({
 
       {/* Like,Comment,Share & Bookmark  */}
       <div className="share">
-        <ul className="flex gap-4 justify-end">
+        <ul className="flex gap-2">
           <li>
-            <AiOutlineLike className="text-xl text-[#0b2f9f] cursor-pointer" />
+            <AiOutlineLike className="text-2xl text-[#0b2f9f] cursor-pointer" />
           </li>
           <li>
-            <FaRegComments className="text-xl text-[#0b2f9f] cursor-pointer" />
+            <FaRegComments className="text-2xl text-[#0b2f9f] cursor-pointer" />
           </li>
           <li>
-            <CiShare2 className="text-xl text-[#0b2f9f] cursor-pointer" />
+            <CiShare2 className="text-2xl text-[#0b2f9f] cursor-pointer" />
           </li>
           <li>
-            <CiBookmark className="text-xl text-[#0b2f9f] cursor-pointer" />
+            <CiBookmark className="text-2xl text-[#0b2f9f] cursor-pointer" />
           </li>
         </ul>
       </div>
