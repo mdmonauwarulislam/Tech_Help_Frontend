@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { CiSearch } from "react-icons/ci";
 import { Carousel } from "@material-tailwind/react";
 import CarouselCard from "../components/Blog/CarouselCard";
 import C1 from "../assets/C1.webp";
@@ -12,7 +13,6 @@ import CategoryBlogPost from "../components/Blog/CategoryBlogPost";
 import SubscribeCard from "../components/Blog/SubscribeCard";
 import Footer from "../components/Blog/Footer";
 import PopularCarouselCard from "../components/Blog/PopularCarouselCard";
-
 
 const items = [
   {
@@ -170,6 +170,15 @@ const Blog = () => {
 
   return (
     <div>
+      <div className="flex justify-end items-center p-10">
+        <div className="relative">
+          <input
+            type="Search"
+            className="border border-black rounded-full outline-none py-2 px-10 pl-10"
+          />
+          <CiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-xl cursor-pointer" />
+        </div>
+      </div>
       <div className="flex justify-center items-center py-10">
         <h1 className="text-center text-5xl text-[#000000] font-bold">
           Trending

@@ -3,6 +3,7 @@ import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComments } from "react-icons/fa";
 import { CiShare2 } from "react-icons/ci";
 import { CiBookmark } from "react-icons/ci";
+import { Link } from "react-router-dom";
 
 const BlogCard = ({
   userImage,
@@ -39,7 +40,7 @@ const BlogCard = ({
       </div>
 
       {/* Blog Content  */}
-      <div className="content">
+      <Link to="/blog-post-details" className="content">
         <div className="">
           <p>
             <span className="font-bold text-[16px]">{p1}</span>:{" "}
@@ -52,7 +53,7 @@ const BlogCard = ({
         <div>
           <p className="text-[#929292]">{p3}</p>
         </div>
-      </div>
+      </Link>
 
       {/* Like,Comment,Share & Bookmark  */}
       <div className="share">

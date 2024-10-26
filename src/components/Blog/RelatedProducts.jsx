@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-const CategoryBlogPost = ({
+
+const RelatedProducts = ({
   blogImage,
   p1,
   date,
@@ -13,14 +13,14 @@ const CategoryBlogPost = ({
   return (
     <div>
       <div className="flex gap-4">
-        <div className="image w-80 h-32 rounded-lg">
+        <div className="image w-60 h-32 rounded-lg">
           <img
             src={blogImage}
             className="w-full h-full object-fit rounded-lg"
             alt=""
           />
         </div>
-        <Link to="/blog-post-details" className="content">
+        <div className="content">
           <div className="">
             <p>
               <span className="font-bold text-[14px]">{p1}</span>:{" "}
@@ -46,10 +46,10 @@ const CategoryBlogPost = ({
               <p className="text-[10px] text-[#929292]">{userRole}</p>
             </div>
           </div>
-        </Link>
+        </div>
       </div>
     </div>
   );
 };
 
-export default CategoryBlogPost;
+export default RelatedProducts;

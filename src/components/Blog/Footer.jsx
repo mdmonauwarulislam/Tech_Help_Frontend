@@ -26,7 +26,7 @@ const Footer = () => {
         </div>
         <div className="bg-gray-200 rounded-2xl w-10 h-10 hover:bg-primary hover:text-white transition-colors duration-300">
           <Link to={"https://www.youtube.com/"}>
-            <FaYoutube className="w-full h-full object-fit px-2 py-2" />
+            <FaYoutube className="w-full h-full px-2 py-2" />
           </Link>
         </div>
       </div>
