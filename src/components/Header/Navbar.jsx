@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiChevronDown, BiMenu } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
-import { logOut, } from '../../redux/slice/authSlice';
+import { logout } from '../../redux/slice/userSlice';
 
 const navLinks = [
   { label: "Home", to: "/" },
@@ -22,7 +22,7 @@ const navLinks = [
 
 const ProfileMenu = ({ closeMenus }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state?.user?.isLoggedIn);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const menuRef = useRef(null);
@@ -31,7 +31,7 @@ const ProfileMenu = ({ closeMenus }) => {
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
-    dispatch(logOut());
+    dispatch(logout());
     navigate("/login");
     closeMenus();
   };
@@ -45,6 +45,7 @@ const ProfileMenu = ({ closeMenus }) => {
   const profileMenuItems = [
     { label: "My Profile", to: "/userdashboard" },
     { label: "Sign Out", signout: true },
+    { label: "My Blog", to: "/myblog", },
   ];
 
   useEffect(() => {

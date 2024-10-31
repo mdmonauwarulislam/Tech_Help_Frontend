@@ -5,6 +5,7 @@ const initialState = {
     user: null,
     token : null,
     isProfileUpdated : false,
+    isLoggedIn: false,
 }
 const userSlice = createSlice({
     name: "user",
@@ -14,12 +15,15 @@ const userSlice = createSlice({
             state.isAuthenticated = true,
             state.user = action.payload.user,
             state.token = action.payload.token
+            state.isLoggedIn = true;
+            localStorage.setItem("token", action.payload.token);
         },
         logout : (state, ) => {
             state.isAuthenticated = false,
             state.user = null,
             state.token = null
-            localStorage.removeItem('token');
+            state.isLoggedIn = false;
+            localStorage.removeItem("token");
         },
         updateProfile : (state) => {
             state.isProfileUpdated = !state.isProfileUpdated;

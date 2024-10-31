@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import C1 from "../assets/C1.webp";
 import C2 from "../assets/C2.webp";
 import C3 from "../assets/C3.webp";
@@ -17,6 +17,9 @@ import Footer from "../components/Blog/Footer";
 import RelatedProducts from "../components/Blog/RelatedProducts";
 
 const BlogPostDetails = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const images = [C1, C2, C3, C4, C5, C6];
   const cardItems = [
     {
