@@ -1,4 +1,4 @@
-import API from "../../env";
+
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -20,7 +20,7 @@ function RecuiterRegisterForm() {
       }
       try {
         setIsSubmitting(true);
-        const response = await axios.post(`${API}/api/register`, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, {
           username,
           email,
           password,
