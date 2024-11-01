@@ -8,12 +8,8 @@ import { logout } from '../../redux/slice/userSlice';
 const navLinks = [
   { label: "Home", to: "/" },
   {
-    label: "Career",
-    subMenu: [
-      { label: "Internship", to: "/internship" },
-      { label: "Job", to: "/job" },
-      { label: "Other Jobs", to: "/other-jobs" },
-    ],
+    label: "Job Search",
+    to : "/job-page",
   },
   { label: "Mentorship", to: "/mentorship" },
   { label: "Roadmap", to: "/roadmap" },

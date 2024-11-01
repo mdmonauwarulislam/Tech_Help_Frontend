@@ -16,6 +16,7 @@ import RecuiterRegisterForm from "./components/RecuiterRegisterForm";
 import Blog from "./pages/Blog";
 import BlogPostDetails from "./pages/BlogPostDetails";
 import MyBlog from "./pages/MyBlog";
+import JobPage from "./pages/JobPage";
 
 function App() {
   const [activePage, setActivePage] = useState("home");
@@ -47,6 +48,7 @@ function App() {
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog-post-details" element={<BlogPostDetails />} />
               <Route path="/myblog" element={<MyBlog />} />
+              <Route path="/job-page" element={<JobPage />} />
             </Routes>
           </main>
         </div>
