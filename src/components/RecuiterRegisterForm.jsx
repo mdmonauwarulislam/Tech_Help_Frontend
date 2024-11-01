@@ -29,7 +29,7 @@ function RecuiterRegisterForm() {
   
         if (response.status === 200) {
           toast.success("User registered successfully");
-          navigate("/");
+          navigate("/login");
         }
         
       } catch (error) {
