@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
+import axios from "axios";
+
 export default function ModalWithEditor() {
   const initialBlogDetails = {
     title: "",
@@ -46,9 +48,38 @@ export default function ModalWithEditor() {
     }
     try {
       // Save the blog details to the database
-      
+      const token = localStorage.getItem("token");
+      console.log("Token:", token);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/blog/createblog`,
+        {
+          title: blogDetails.title,
+          category: blogDetails.category,
+          image: blogDetails.image,
+          content: blogDetails.content,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token
+          },
+        }
+      );
+      if (response.status === 201) {
+        toast.success("Blog created successfully");
+      }
     } catch (error) {
-      toast.error("Something went wrong");
+      if (error.response) {
+        console.error("Error data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        console.error("Error headers:", error.response.headers);
+        toast.error(
+          `Error: ${error.response.data.message || "Unauthorized access"}`
+        );
+      } else {
+        console.error("Error message:", error.message);
+        toast.error("Something went wrong");
+      }
     }
     console.log("Submitted Blog Details:", blogDetails);
     setBlogDetails(initialBlogDetails); // Reset the form after submission

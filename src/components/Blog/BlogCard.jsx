@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaRegComments } from "react-icons/fa";
-import { CiShare2 } from "react-icons/ci";
-import { CiBookmark } from "react-icons/ci";
+import { CiShare2, CiBookmark } from "react-icons/ci";
+import { FaBookmark } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const BlogCard = ({
   userImage,
@@ -15,9 +17,18 @@ const BlogCard = ({
   p2,
   p3,
 }) => {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const handleBookmarkClick = () => {
+    setIsBookmarked((prev) => {
+      toast(prev ? "Removed from bookmarks" : "Bookmarked!");
+      return !prev;
+    });
+  };
+
   return (
     <div className="space-y-3">
-      {/* User Info  */}
+      {/* User Info */}
       <div className="flex items-center gap-3">
         <div className="w-12 h-12">
           <img src={userImage} className="w-full h-full rounded-full" alt="" />
@@ -28,7 +39,7 @@ const BlogCard = ({
         </div>
       </div>
 
-      {/* Blog Image  */}
+      {/* Blog Image */}
       <div className="card rounded-lg">
         <div className="image h-64">
           <img
@@ -39,9 +50,9 @@ const BlogCard = ({
         </div>
       </div>
 
-      {/* Blog Content  */}
+      {/* Blog Content */}
       <Link to="/blog-post-details" className="content">
-        <div className="">
+        <div>
           <p>
             <span className="font-bold text-[16px]">{p1}</span>:{" "}
             <span className="text-sm text-[#929292]">{date}</span>
@@ -55,7 +66,7 @@ const BlogCard = ({
         </div>
       </Link>
 
-      {/* Like,Comment,Share & Bookmark  */}
+      {/* Like, Comment, Share & Bookmark */}
       <div className="share">
         <ul className="flex gap-2">
           <li>
@@ -67,8 +78,12 @@ const BlogCard = ({
           <li>
             <CiShare2 className="text-2xl text-[#0b2f9f] cursor-pointer" />
           </li>
-          <li>
-            <CiBookmark className="text-2xl text-[#0b2f9f] cursor-pointer" />
+          <li onClick={handleBookmarkClick} className="cursor-pointer">
+            {isBookmarked ? (
+              <FaBookmark className="text-2xl text-[#0b2f9f]" />
+            ) : (
+              <CiBookmark className="text-2xl text-[#0b2f9f]" />
+            )}
           </li>
         </ul>
       </div>
