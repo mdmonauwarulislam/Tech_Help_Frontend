@@ -1,4 +1,3 @@
-import React from "react";
 import ModalWithEditor from "./ModalWithEditor";
 
 function MyBlog() {
