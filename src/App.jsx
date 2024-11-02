@@ -19,6 +19,7 @@ import MyBlog from "./pages/MyBlog";
 import JobPage from "./pages/JobPage";
 import PostJob from "./components/Job/JobPost";
 import SingleJobCard from "./components/Job/SingleJobCard";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [activePage, setActivePage] = useState("home");
@@ -58,6 +59,7 @@ function App() {
         </div>
         <BottomNav setActivePage={setActivePage} />
       </div>
+      <Footer/>
       <ToastContainer />
     </Router>
   );

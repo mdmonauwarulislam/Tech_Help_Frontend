@@ -23,6 +23,9 @@ module.exports = withMT({
           900: "#020b09",
         },
       },
+      fontFamily: {
+        grotesk : ["Space Grotesk", "cursive"],
+      },
     },
   },
   plugins: [],

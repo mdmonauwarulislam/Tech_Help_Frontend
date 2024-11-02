@@ -61,7 +61,7 @@ export default function ModalWithEditor() {
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Attach token
+            Authorization: `Bearer ${token}`,
           },
         }
       );

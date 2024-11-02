@@ -100,7 +100,7 @@ function JobPage() {
           className={`absolute left-5 top-1/2 transform -translate-y-1/2 flex items-center space-x-4 text-gray-400 text-xl ${
             isFocused ? "hidden" : "block"
           }`}
-          style={{ pointerEvents: "none" }} // Disable pointer events
+          style={{ pointerEvents: "none" }} 
         >
           <IoSearch />
           <span>Enter Job title</span>
