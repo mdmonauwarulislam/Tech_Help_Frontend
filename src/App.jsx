@@ -17,6 +17,8 @@ import Blog from "./pages/Blog";
 import BlogPostDetails from "./pages/BlogPostDetails";
 import MyBlog from "./pages/MyBlog";
 import JobPage from "./pages/JobPage";
+import PostJob from "./components/Job/JobPost";
+import SingleJobCard from "./components/Job/SingleJobCard";
 
 function App() {
   const [activePage, setActivePage] = useState("home");
@@ -49,6 +51,8 @@ function App() {
               <Route path="/blog-post-details" element={<BlogPostDetails />} />
               <Route path="/myblog" element={<MyBlog />} />
               <Route path="/job-page" element={<JobPage />} />
+              <Route path="/post-job" element={<PostJob />} />
+              <Route path="/single-job" element={<SingleJobCard />} />
             </Routes>
           </main>
         </div>

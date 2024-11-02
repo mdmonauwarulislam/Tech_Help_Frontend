@@ -3,6 +3,7 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import { CiBookmark } from "react-icons/ci";
 import { FaBookmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const JobCard = ({ title, type, salaryRange, companyName, location, applicantsCount, logo, profiles }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -84,9 +85,11 @@ const JobCard = ({ title, type, salaryRange, companyName, location, applicantsCo
 
         {/* Action Buttons */}
         <div className="mt-4 flex justify-between items-center px-2">
-        <button className="border border-primary text-primary font-semibold py-2 px-4 rounded-md hover:bg-gray-100">
+       <Link to = "/single-job">
+       <button className="border border-primary text-primary font-semibold py-2 px-4 rounded-md hover:bg-gray-100">
           View Details
         </button>
+       </Link> 
         <button className="bg-primary text-white py-2 px-4 rounded-md mr-2 hover:bg-primary-dark">
           Apply Now
         </button>
