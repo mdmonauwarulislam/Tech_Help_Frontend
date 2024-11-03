@@ -3,8 +3,12 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { handleIsBlogUpdated } from "../../redux/slice/blogSlice";
 
 export default function ModalWithEditor() {
+  const dispatch = useDispatch();
+
   const initialBlogDetails = {
     title: "",
     category: "",
@@ -67,6 +71,7 @@ export default function ModalWithEditor() {
       );
       if (response.status === 201) {
         toast.success("Blog created successfully");
+        dispatch(handleIsBlogUpdated());
       }
     } catch (error) {
       if (error.response) {
