@@ -28,7 +28,7 @@ const JobCard = ({ title, type, salaryRange, companyName, location, applicantsCo
   };
 
   return (
-    <div className="bg-blue-50 shadow-md rounded-lg py-4 px-8 relative">
+    <div className=" shadow-md rounded-lg py-4 px-8 relative">
       {/* Wishlist Icon */}
       <div className="absolute top-3 right-3 cursor-pointer text-primary" onClick={handleBookmarkClick}>
         {isBookmarked ? <FaBookmark size={30} /> : <CiBookmark size={30} />}

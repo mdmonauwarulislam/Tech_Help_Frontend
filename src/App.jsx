@@ -16,10 +16,14 @@ import RecuiterRegisterForm from "./components/RecuiterRegisterForm";
 import Blog from "./pages/Blog";
 import BlogPostDetails from "./pages/BlogPostDetails";
 import MyBlog from "./pages/MyBlog";
+<<<<<<< Updated upstream
+=======
 import JobPage from "./pages/JobPage";
 import PostJob from "./components/Job/JobPost";
 import SingleJobCard from "./components/Job/SingleJobCard";
 import Footer from "./components/Footer/Footer";
+import CompanyDashboard from "./pages/DashBoard/CompanyDashboard";
+>>>>>>> Stashed changes
 
 function App() {
   const [activePage, setActivePage] = useState("home");
