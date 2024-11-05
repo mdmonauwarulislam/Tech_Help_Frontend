@@ -7,6 +7,7 @@ import { logout } from '../../redux/slice/userSlice';
 
 const navLinks = [
   { label: "Home", to: "/" },
+<<<<<<< Updated upstream
   {
     label: "Career",
     subMenu: [
@@ -15,6 +16,9 @@ const navLinks = [
       { label: "Other Jobs", to: "/other-jobs" },
     ],
   },
+=======
+  { label: "Job Search", to: "/job-page" },
+>>>>>>> Stashed changes
   { label: "Mentorship", to: "/mentorship" },
   { label: "Roadmap", to: "/roadmap" },
   { label: "Blogs", to: "/blog" },
@@ -23,6 +27,7 @@ const navLinks = [
 const ProfileMenu = ({ closeMenus }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state?.user?.isLoggedIn);
+  const userType = useSelector((state) => state?.user?.type); // Access user type
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const menuRef = useRef(null);
@@ -43,9 +48,9 @@ const ProfileMenu = ({ closeMenus }) => {
   };
 
   const profileMenuItems = [
-    { label: "My Profile", to: "/userdashboard" },
+    { label: "My Profile", to: userType === "student" ? "/userdashboard" : "/companydashboard" },
     { label: "Sign Out", signout: true },
-    { label: "My Blog", to: "/myblog", },
+    { label: "My Blog", to: "/myblog" },
   ];
 
   useEffect(() => {
@@ -67,7 +72,7 @@ const ProfileMenu = ({ closeMenus }) => {
         <>
           <button
             onClick={toggleMenu}
-            className="flex items-center gap-1 p-2 border rounded-full hover:bg-gray-200 "
+            className="flex items-center gap-1 p-2 border rounded-full hover:bg-gray-200"
           >
             <img
               className="w-8 h-8 rounded-full border border-gray-900"
@@ -93,7 +98,12 @@ const ProfileMenu = ({ closeMenus }) => {
           )}
         </>
       ) : (
-        <Link to="/login" className="px-3 py-2 text-primary hover:text-white hover:bg-primary rounded-md border border-primary">Login</Link>
+        <Link
+          to="/login"
+          className="px-3 py-2 text-primary hover:text-white hover:bg-primary rounded-md border border-primary"
+        >
+          Login
+        </Link>
       )}
     </div>
   );
@@ -153,7 +163,7 @@ const Navbar = () => {
                     <BiChevronDown className={`transition-transform ${activeDropdown === label ? "rotate-180" : ""}`} />
                   </button>
                   {activeDropdown === label && (
-                    <div className="absolute mt-2 w-40 bg-white hover:text-white text-primary border border-gray-300 rounded-md shadow-lg z-10 ">
+                    <div className="absolute mt-2 w-40 bg-white text-primary border border-gray-300 rounded-md shadow-lg z-10">
                       <ul className="p-1">
                         {subMenu.map((subItem) => (
                           <li key={subItem.label} className="p-2 hover:bg-primary hover:text-white text-primary rounded-md">
