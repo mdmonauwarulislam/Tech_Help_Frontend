@@ -39,7 +39,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/signup" element={<Signin />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/userdashboard" element={<UserDashboard />} />
+              <Route path="/companydashboard" element={<CompanyDashboard />} />
+
               <Route
                 path="/userdashboard/edit-profile"
                 element={<EditProfileFrom />}
