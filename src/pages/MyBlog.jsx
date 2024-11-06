@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ModalWithEditor from "../components/Blog/ModalWithEditor";
+import CreateBlog from "../components/Blog/CreateBlog";
 import noData from "../assets/noDataSvg.svg";
 import { useSelector } from "react-redux";
 
@@ -52,7 +52,7 @@ function MyBlog() {
 
   return (
     <>
-      <div className="px-4 pt-3 py-5">
+      <div className="px-4 pt-3 py-5 w-10/12 mx-auto">
         <h1 className="m-auto text-blue-700 font-bold">My Blogs</h1>
         <div className="flex justify-between border-b-2 pb-3 pt-3">
           <div className="flex gap-4">
@@ -78,12 +78,17 @@ function MyBlog() {
             </button>
           </div>
           <div>
-            <ModalWithEditor />
+            <CreateBlog />
           </div>
         </div>
       </div>
 
-      <div className="max-h-[500px] overflow-y-auto scrollbar-hide">
+      <div
+        className="max-h-[500px] overflow-y-auto w-10/12 mx-auto"
+        style={{
+          scrollbarWidth: "none",
+        }}
+      >
         {" "}
         {/* Adjust max height as needed */}
         {isLoading ? (

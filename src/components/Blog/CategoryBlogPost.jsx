@@ -30,9 +30,9 @@ const CategoryBlogPost = ({
           <div>
             <h1 className="text-xl font-serif font-bold">{p2}</h1>
           </div>
-          {/* <div>
+          <div>
             <p className="text-[#929292]">{p3}</p>
-          </div> */}
+          </div>
           <div className="flex items-center gap-3">
             <div className="w-8 h-8">
               <img

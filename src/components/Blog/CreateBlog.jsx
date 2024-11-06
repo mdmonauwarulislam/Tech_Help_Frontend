@@ -6,7 +6,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { handleIsBlogUpdated } from "../../redux/slice/blogSlice";
 
-export default function ModalWithEditor() {
+export default function CreateBlog() {
   const dispatch = useDispatch();
 
   const initialBlogDetails = {
@@ -117,7 +117,10 @@ export default function ModalWithEditor() {
               </button>
             </div>
 
-            <div className="border-t border-primary py-8 space-y-4">
+            <div
+              className="border-t border-primary py-8 space-y-4 max-h-[500px] overflow-y-auto"
+              style={{ scrollbarWidth: "none" }}
+            >
               <div className="flex flex-col">
                 <label className="text-sm font-semibold text-gray-700">
                   Blog Title

@@ -13,6 +13,7 @@ import CategoryBlogPost from "../components/Blog/CategoryBlogPost";
 import SubscribeCard from "../components/Blog/SubscribeCard";
 import Footer from "../components/Blog/Footer";
 import PopularCarouselCard from "../components/Blog/PopularCarouselCard";
+import axios from "axios";
 
 const items = [
   {
@@ -143,6 +144,38 @@ const Blog = () => {
   const [isExiting, setIsExiting] = useState(false);
   const totalItems = items.length;
 
+  // const [blogs, setBlogs] = useState([]);
+  // useEffect(() => {
+  //   const fetchBlogs = async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${import.meta.env.VITE_API_URL}/blog/getallblogs`,
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         }
+  //       );
+  //       if (response.status === 200) {
+  //         setBlogs(response.data.data);
+  //       } else {
+  //         console.log("Error in fetching blogs");
+  //       }
+  //     } catch (error) {
+  //       if (error.response && error.response.status === 400) {
+  //         console.log(error.response.data.message);
+  //       } else {
+  //         console.log("Something went wrong");
+  //       }
+  //     }
+  //   };
+
+  //   fetchBlogs();
+  // }, []); // Empty dependency array ensures it runs only once when the component mounts
+
+  // console.log("blogs---is", blogs);
+
+
   const handleNextSlide = () => {
     setIsExiting(true);
     setTimeout(() => {
@@ -211,6 +244,7 @@ const Blog = () => {
             ></span>
           ))}
         </div>
+
         {/* blog card  */}
         <div className="px-16 py-10 flex flex-wrap justify-between">
           {cardItems.map((item, index) => {
