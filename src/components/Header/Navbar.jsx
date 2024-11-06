@@ -7,14 +7,7 @@ import { logout } from '../../redux/slice/userSlice';
 
 const navLinks = [
   { label: "Home", to: "/" },
-<<<<<<< Updated upstream
-  {
-    label: "Job Search",
-    to : "/job-page",
-  },
-=======
   { label: "Job Search", to: "/job-page" },
->>>>>>> Stashed changes
   { label: "Mentorship", to: "/mentorship" },
   { label: "Roadmap", to: "/roadmap" },
   { label: "Blogs", to: "/blog" },
@@ -44,7 +37,7 @@ const ProfileMenu = ({ closeMenus }) => {
   };
 
   const profileMenuItems = [
-    { label: "My Profile", to: userType === "student" ? "/userdashboard" : "/companydashboard" },
+    { label: "My Profile", to: userType === "student" ? "/userdashboard" : "/companydashboard" }, // Conditional path
     { label: "Sign Out", signout: true },
     { label: "My Blog", to: "/myblog" },
   ];
@@ -235,3 +228,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+o
