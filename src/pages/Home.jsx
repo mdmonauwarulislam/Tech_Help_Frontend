@@ -3,83 +3,9 @@ import growthVector from "../assets/pattern.png";
 import { SiBloglovin, SiCodementor } from "react-icons/si";
 import { RiRoadMapFill, RiUserSearchFill } from "react-icons/ri";
 import BlogCard from "../components/Blog/BlogCard";
-
-import C1 from "../assets/C1.webp";
-import C2 from "../assets/C2.webp";
-import C3 from "../assets/C3.webp";
-import C4 from "../assets/C4.webp";
-import C5 from "../assets/c5.webp";
-import C6 from "../assets/c6.webp";
+import axios from "axios";
 import JobCard from "../components/Job/JobCard";
-
-const cardItems = [
-  {
-    blogImage: C5,
-    p1: "Business, Travel",
-    date: "July 2, 2020",
-    p2: "Your most unhappy customers are your greatest source of learning.",
-    p3: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-    userImage:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1480&q=80",
-    userName: "Sergy Campbell",
-    userRole: "CEO, Founder",
-  },
-  {
-    blogImage: C6,
-    p1: "Business, Travel",
-    date: "July 2, 2020",
-    p2: "Your most unhappy customers are your greatest source of learning.",
-    p3: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-    userImage:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1480&q=80",
-    userName: "Sergy Campbell",
-    userRole: "CEO, Founder",
-  },
-  {
-    blogImage: C1,
-    p1: "Business, Travel",
-    date: "July 2, 2020",
-    p2: "Your most unhappy customers are your greatest source of learning.",
-    p3: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-    userImage:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1480&q=80",
-    userName: "Sergy Campbell",
-    userRole: "CEO, Founder",
-  },
-  {
-    blogImage: C2,
-    p1: "Business, Travel",
-    date: "July 2, 2020",
-    p2: "Your most unhappy customers are your greatest source of learning.",
-    p3: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-    userImage:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1480&q=80",
-    userName: "Sergy Campbell",
-    userRole: "CEO, Founder",
-  },
-  {
-    blogImage: C3,
-    p1: "Business, Travel",
-    date: "July 2, 2020",
-    p2: "Your most unhappy customers are your greatest source of learning.",
-    p3: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-    userImage:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1480&q=80",
-    userName: "Sergy Campbell",
-    userRole: "CEO, Founder",
-  },
-  {
-    blogImage: C4,
-    p1: "Business, Travel",
-    date: "July 2, 2020",
-    p2: "Your most unhappy customers are your greatest source of learning.",
-    p3: "Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.",
-    userImage:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1480&q=80",
-    userName: "Sergy Campbell",
-    userRole: "CEO, Founder",
-  },
-];
+import { useEffect, useState } from "react";
 
 const jobs = [
   {
@@ -159,6 +85,31 @@ const jobs = [
   },
 ];
 function Home() {
+  const [blogs, setBlogs] = useState([]);
+  const fetchBlogs = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/blog/getallblogs`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        setBlogs(response.data.data); // assuming data is in response.data.data
+      } else {
+        console.log("Error in fetching blogs");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
   return (
     <>
       <div
@@ -249,14 +200,12 @@ function Home() {
               </button>
             </div>
 
-            <div className="grid grid-cols-3 gap-10">
-              {cardItems.map((item, index) => {
-                return (
-                  <div className="" key={index}>
-                    <BlogCard {...item} />
-                  </div>
-                );
-              })}
+            <div className="px-16 py-10 flex flex-wrap">
+              {blogs.map((blog) => (
+                <div className="w-full md:w-1/3 p-4" key={blog._id}>
+                  <BlogCard item={blog} />
+                </div>
+              ))}
             </div>
           </div>
           {/* Job Sections */}
@@ -282,7 +231,6 @@ function Home() {
             </div>
           </div>
         </div>
-        
       </div>
     </>
   );

@@ -7,17 +7,9 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BlogCard = ({
-  userImage,
-  userName,
-  userRole,
-  blogImage,
-  p1,
-  date,
-  p2,
-  p3,
-}) => {
+const BlogCard = ({ item }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false); // State for toggling content expansion
 
   const handleBookmarkClick = () => {
     setIsBookmarked((prev) => {
@@ -26,16 +18,30 @@ const BlogCard = ({
     });
   };
 
+  const stripHtmlTags = (html) => {
+    return html ? html.replace(/<[^>]+>/g, "") : "";
+  };
+
+  const toggleContent = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
   return (
     <div className="space-y-3">
       {/* User Info */}
       <div className="flex items-center gap-3">
         <div className="w-12 h-12">
-          <img src={userImage} className="w-full h-full rounded-full" alt="" />
+          <img
+            src={`${import.meta.env.VITE_API_URL}/uploads/${
+              item?.user?.profilePicture
+            }`}
+            className="w-full h-full rounded-full object-cover"
+            alt="profile picture"
+          />
         </div>
         <div>
-          <h1 className="font-bold text-[14px]">{userName}</h1>
-          <p className="text-xs text-[#929292]">{userRole}</p>
+          <h1 className="font-bold text-[14px]">{item?.user?.username}</h1>
+          <p className="text-xs text-[#929292]">Role</p>
         </div>
       </div>
 
@@ -43,9 +49,9 @@ const BlogCard = ({
       <div className="card rounded-lg">
         <div className="image h-64">
           <img
-            src={blogImage}
-            className="h-full w-full object-cover rounded-lg"
-            alt=""
+            src={item?.image}
+            className="h-full w-full object-fit rounded-lg"
+            alt={item?.title}
           />
         </div>
       </div>
@@ -54,15 +60,25 @@ const BlogCard = ({
       <Link to="/blog-post-details" className="content">
         <div>
           <p>
-            <span className="font-bold text-[16px]">{p1}</span>:{" "}
-            <span className="text-sm text-[#929292]">{date}</span>
+            <span className="font-bold text-[16px]">{item?.category}</span>:{" "}
+            <span className="text-sm text-[#929292]">
+              {new Date(item?.createdAt).toLocaleDateString()}
+            </span>
           </p>
         </div>
         <div>
-          <h1 className="text-xl font-serif font-bold">{p2}</h1>
+          <h1 className="text-xl font-serif font-bold line-clamp-3">
+            {isExpanded
+              ? stripHtmlTags(item?.content)
+              : `${stripHtmlTags(item?.content).slice(0, 150)}...`}
+          </h1>
         </div>
-        <div>
-          <p className="text-[#929292]">{p3}</p>
+        {/* Show More / Show Less button */}
+        <div
+          className="text-sm text-blue-600 cursor-pointer"
+          onClick={toggleContent}
+        >
+          {isExpanded ? "Show Less" : "Show More"}
         </div>
       </Link>
 
