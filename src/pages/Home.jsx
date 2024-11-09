@@ -86,6 +86,9 @@ const jobs = [
 ];
 function Home() {
   const [blogs, setBlogs] = useState([]);
+  const [currentBlogPage, setCurrentBlogPage] = useState(1);
+  const blogItemsPerPage = 6;
+
   const fetchBlogs = async () => {
     try {
       const response = await axios.get(
@@ -107,9 +110,25 @@ function Home() {
     }
   };
 
+  const handleNextBlogPage = () => {
+    setCurrentBlogPage((prevPage) =>
+      Math.min(prevPage + 1, Math.ceil(blogs.length / blogItemsPerPage))
+    );
+  };
+
+  const handlePrevBlogPage = () => {
+    setCurrentBlogPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const paginatedBlogPosts = blogs.slice(
+    (currentBlogPage - 1) * blogItemsPerPage,
+    currentBlogPage * blogItemsPerPage
+  );
+
   useEffect(() => {
     fetchBlogs();
   }, []);
+
   return (
     <>
       <div
@@ -201,11 +220,35 @@ function Home() {
             </div>
 
             <div className="px-16 py-10 flex flex-wrap">
-              {blogs.map((blog) => (
+              {paginatedBlogPosts.map((blog) => (
                 <div className="w-full md:w-1/3 p-4" key={blog._id}>
                   <BlogCard item={blog} />
                 </div>
               ))}
+            </div>
+
+            {/* Pagination Controls (Aligned to the right) */}
+            <div className="flex justify-end gap-4 mt-6">
+              <button
+                onClick={handlePrevBlogPage}
+                disabled={currentBlogPage === 1}
+                className="p-2 text-white text-sm bg-blue-600 rounded disabled:bg-gray-300"
+              >
+                Back
+              </button>
+              <span className="text-sm flex justify-center items-center">
+                Page {currentBlogPage} of{" "}
+                {Math.ceil(blogs.length / blogItemsPerPage)}
+              </span>
+              <button
+                onClick={handleNextBlogPage}
+                disabled={
+                  currentBlogPage === Math.ceil(blogs.length / blogItemsPerPage)
+                }
+                className="p-2 text-white text-sm bg-blue-600 rounded disabled:bg-gray-300"
+              >
+                Next
+              </button>
             </div>
           </div>
           {/* Job Sections */}

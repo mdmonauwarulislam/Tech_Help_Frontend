@@ -15,7 +15,7 @@ const CategoryBlogPost = ({ item }) => {
   return (
     <div className="flex gap-4 mb-6">
       {/* Image container with fixed height and width */}
-      <div className="w-80 h-48 rounded-lg overflow-hidden">
+      <div className="w-96 h-60 rounded-lg overflow-hidden">
         <img
           src={item?.image}
           className="w-full h-full object-cover rounded-lg"
