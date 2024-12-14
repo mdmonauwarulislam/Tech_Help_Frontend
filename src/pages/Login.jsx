@@ -34,6 +34,8 @@ function Login() {
         const userData = response.data.data.user;
 
         localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("role", userData.role);
         dispatch(login({
           user: userData, token 
         }));
@@ -44,7 +46,14 @@ function Login() {
           }else{
             navigate("/");
           }
-        }else{
+        }else if(userData.role === "company"){
+          if(!userData.isProfileCompleted){
+            navigate("/companydashboard");
+          }else{
+            navigate("/");
+          }
+        }
+        else{
           navigate("/dashboard");
         }
       }

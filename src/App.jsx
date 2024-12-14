@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/Header/Navbar";
 import Sidebar from "./components/Sidebar";
 import BottomNav from "./components/Header/BottomNav";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Signin from "./pages/Signup";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -22,10 +22,24 @@ import PostJob from "./components/Job/JobPost";
 import SingleJobCard from "./components/Job/SingleJobCard";
 import Footer from "./components/Footer/Footer";
 import CompanyDashboard from "./pages/DashBoard/CompanyDashboard";
-
+import { useDispatch } from "react-redux";
+import { loadUser, login } from "./redux/slice/userSlice";
 
 function App() {
+  const dispatch = useDispatch();
   const [activePage, setActivePage] = useState("home");
+  useEffect(() => {
+    if (localStorage.getItem("token") && localStorage.getItem("user")) {
+      dispatch(
+        login({
+          isAuthenticated: true,
+          user: JSON.parse(localStorage.getItem("user")),
+          token: localStorage.getItem("token"),
+          isLoggedIn: true,
+        })
+      );
+    }
+  }, []);
 
   return (
     <Router>
@@ -64,7 +78,7 @@ function App() {
         </div>
         <BottomNav setActivePage={setActivePage} />
       </div>
-      <Footer/>
+      <Footer />
       <ToastContainer />
     </Router>
   );

@@ -3,29 +3,32 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiChevronDown, BiMenu } from "react-icons/bi";
 import { AiOutlineClose } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from '../../redux/slice/userSlice';
+import { logout } from "../../redux/slice/userSlice";
 
 const navLinks = [
-  { label: "Home", to: "/" },
-  { label: "Job Search", to: "/job-page" },
-  { label: "Mentorship", to: "/mentorship" },
-  { label: "Roadmap", to: "/roadmap" },
-  { label: "Blogs", to: "/blog" },
+  { label: "Home", to: "/", allow: ["student", "company"] },
+  { label: "Job Search", to: "/job-page", allow: ["student"] },
+  { label: "Mentorship", to: "/mentorship", allow: ["student"] },
+  { label: "Roadmap", to: "/roadmap", allow: ["student"] },
+  { label: "Blogs", to: "/blog", allow: ["student", "company"] },
 ];
 
 const ProfileMenu = ({ closeMenus }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isLoggedIn = useSelector((state) => state?.user?.isLoggedIn);
-  const userType = useSelector((state) => state?.user?.type); // Access user type
+  const isLoggedInUser = useSelector((state) => state?.user?.isLoggedIn);
+  const role = useSelector((state) => state?.user?.user?.role);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const menuRef = useRef(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(isLoggedInUser);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
+    localStorage.clear();
     dispatch(logout());
+    setIsLoggedIn(false);
     navigate("/login");
     closeMenus();
   };
@@ -36,11 +39,32 @@ const ProfileMenu = ({ closeMenus }) => {
     setIsMenuOpen(false);
   };
 
-  const profileMenuItems = [
-    { label: "My Profile", to: userType === "student" ? "/userdashboard" : "/companydashboard" }, // Conditional path
-    { label: "Sign Out", signout: true },
-    { label: "My Blog", to: "/myblog" },
-  ];
+  const profileMenuItems = () => {
+    if (role === "student") {
+      return [
+        { label: "Dashboard", to: "/userdashboard" },
+        { label: "Edit Profile", to: "/userdashboard/edit-profile" },
+        { label: "Sign Out", signout: true },
+      ];
+    } else if (role === "company") {
+      return [
+        { label: "Dashboard", to: "/companydashboard" },
+        { label: "Post Job", to: "/post-job" },
+        { label: "Sign Out", signout: true },
+      ];
+    }
+    return [];
+  };
+
+  useEffect(() => {
+    console.log("role:",role);
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+    }else{
+      setIsLoggedIn(false);
+    }
+  }, [isLoggedInUser]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -73,7 +97,7 @@ const ProfileMenu = ({ closeMenus }) => {
           {isMenuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
               <ul className="p-1">
-                {profileMenuItems.map(({ label, to, signout }) => (
+                {Array.isArray(profileMenuItems()) &&  profileMenuItems().length>0 && profileMenuItems().map(({ label, to, signout }) => (
                   <li
                     key={label}
                     className="p-2 hover:bg-gray-100 cursor-pointer"
@@ -102,6 +126,7 @@ const Navbar = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const mobileMenuRef = useRef(null);
+  const role = useSelector((state) => state?.user?.user?.role);
 
   const toggleDropdown = (label) => {
     setActiveDropdown((prev) => (prev === label ? null : label));
@@ -140,38 +165,19 @@ const Navbar = () => {
         </Link>
 
         <div className="hidden md:flex items-center gap-6">
-          {navLinks.map(({ label, to, subMenu }) => (
-            <div key={label} className="relative">
-              {subMenu ? (
-                <>
-                  <button
-                    onClick={() => toggleDropdown(label)}
-                    className="flex items-center gap-1 hover:bg-primary hover:text-white text-primary rounded-md p-2"
-                  >
-                    {label}
-                    <BiChevronDown className={`transition-transform ${activeDropdown === label ? "rotate-180" : ""}`} />
-                  </button>
-                  {activeDropdown === label && (
-                    <div className="absolute mt-2 w-40 bg-white text-primary border border-gray-300 rounded-md shadow-lg z-10">
-                      <ul className="p-1">
-                        {subMenu.map((subItem) => (
-                          <li key={subItem.label} className="p-2 hover:bg-primary hover:text-white text-primary rounded-md">
-                            <Link to={subItem.to} onClick={closeMenus}>
-                              {subItem.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <Link to={to} className="hover:bg-primary hover:text-white text-primary rounded-md p-2" onClick={closeMenus}>
+          {navLinks
+            .filter(({ allow }) => allow.includes(role) || allow === "all") // Filter items based on the role
+            .map(({ label, to }) => (
+              <div key={label} className="relative">
+                <Link
+                  to={to}
+                  className="hover:bg-primary hover:text-white text-primary rounded-md p-2"
+                  onClick={closeMenus}
+                >
                   {label}
                 </Link>
-              )}
-            </div>
-          ))}
+              </div>
+            ))}
         </div>
 
         <div className="flex items-center gap-4">
@@ -188,36 +194,15 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white border-t border-gray-200" ref={mobileMenuRef}>
           <ul className="flex flex-col p-4">
-            {navLinks.map(({ label, to, subMenu }) => (
+            {navLinks.map(({ label, to }) => (
               <li key={label} className="mb-2">
-                {subMenu ? (
-                  <>
-                    <button
-                      onClick={() => toggleDropdown(label)}
-                      className="flex items-center justify-between p-2 w-full text-left hover:bg-primary hover:text-white text-primary rounded-md"
-                    >
-                      {label}
-                      <BiChevronDown
-                        className={`transition-transform ${activeDropdown === label ? "rotate-180" : ""}`}
-                      />
-                    </button>
-                    {activeDropdown === label && (
-                      <ul className="pl-4">
-                        {subMenu.map((subItem) => (
-                          <li key={subItem.label} className="p-2 hover:bg-primary hover:text-white text-primary rounded-md">
-                            <Link to={subItem.to} onClick={closeMenus}>
-                              {subItem.label}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </>
-                ) : (
-                  <Link to={to} className="p-2 block hover:bg-primary hover:text-white text-primary rounded-md" onClick={closeMenus}>
-                    {label}
-                  </Link>
-                )}
+                <Link
+                  to={to}
+                  className="p-2 block hover:bg-primary hover:text-white text-primary rounded-md"
+                  onClick={closeMenus}
+                >
+                  {label}
+                </Link>
               </li>
             ))}
           </ul>

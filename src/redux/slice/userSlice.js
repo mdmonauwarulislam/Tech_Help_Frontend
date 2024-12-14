@@ -27,9 +27,14 @@ const userSlice = createSlice({
         },
         updateProfile : (state) => {
             state.isProfileUpdated = !state.isProfileUpdated;
+        },
+        loadUser:(state, action) => {
+            state.isAuthenticated = true,
+            state.user = action.payload.user,
+            state.isLoggedIn = true;
         }
     }
 })
 
-export const { login, logout,updateProfile } = userSlice.actions;
+export const { login, logout,updateProfile ,loadUser} = userSlice.actions;
 export default userSlice.reducer;
