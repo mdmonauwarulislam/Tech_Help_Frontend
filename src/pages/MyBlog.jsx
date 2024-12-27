@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import CreateBlog from "../components/Blog/CreateBlog";
 import noData from "../assets/noDataSvg.svg";
