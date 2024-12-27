@@ -43,7 +43,7 @@ const ProfileMenu = ({ closeMenus }) => {
     if (role === "student") {
       return [
         { label: "Dashboard", to: "/userdashboard" },
-        { label: "Edit Profile", to: "/userdashboard/edit-profile" },
+        { label: "My Blog", to: "/myblog" },
         { label: "Sign Out", signout: true },
       ];
     } else if (role === "company") {

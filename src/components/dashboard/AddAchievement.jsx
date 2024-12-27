@@ -10,8 +10,8 @@ const AddAchievement = () => {
   const [achievements, setAchievements] = useState([]); 
   const [selectedAchievement, setSelectedAchievement] = useState(null); 
   const [isEditing, setIsEditing] = useState(false);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false); // State for delete confirmation modal
-  const [achievementToDelete, setAchievementToDelete] = useState(null); // State to store selected achievement for deletion
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false); 
+  const [achievementToDelete, setAchievementToDelete] = useState(null);
 
   // Open input field for adding a new achievement
   const openInputField = () => {
