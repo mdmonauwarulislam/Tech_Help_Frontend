@@ -57,11 +57,11 @@ const ProfileMenu = ({ closeMenus }) => {
   };
 
   useEffect(() => {
-    console.log("role:",role);
+    console.log("role:", role);
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
-    }else{
+    } else {
       setIsLoggedIn(false);
     }
   }, [isLoggedInUser]);
@@ -92,20 +92,28 @@ const ProfileMenu = ({ closeMenus }) => {
               src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1480&q=80"
               alt="profile"
             />
-            <BiChevronDown className={`transition-transform ${isMenuOpen ? "rotate-180" : ""}`} />
+            <BiChevronDown
+              className={`transition-transform ${
+                isMenuOpen ? "rotate-180" : ""
+              }`}
+            />
           </button>
           {isMenuOpen && (
             <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-10">
               <ul className="p-1">
-                {Array.isArray(profileMenuItems()) &&  profileMenuItems().length>0 && profileMenuItems().map(({ label, to, signout }) => (
-                  <li
-                    key={label}
-                    className="p-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={signout ? handleSignOut : () => handleLinkClick(to)}
-                  >
-                    {label}
-                  </li>
-                ))}
+                {Array.isArray(profileMenuItems()) &&
+                  profileMenuItems().length > 0 &&
+                  profileMenuItems().map(({ label, to, signout }) => (
+                    <li
+                      key={label}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={
+                        signout ? handleSignOut : () => handleLinkClick(to)
+                      }
+                    >
+                      {label}
+                    </li>
+                  ))}
               </ul>
             </div>
           )}
@@ -143,7 +151,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (mobileMenuRef.current && !mobileMenuRef.current.contains(event.target)) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(event.target)
+      ) {
         setIsMobileMenuOpen(false);
       }
     };
@@ -186,13 +197,20 @@ const Navbar = () => {
             className="md:hidden flex items-center p-2 hover:bg-primary hover:text-white text-primary rounded-md"
             onClick={toggleMobileMenu}
           >
-            {isMobileMenuOpen ? <AiOutlineClose size={24} /> : <BiMenu size={24} />}
+            {isMobileMenuOpen ? (
+              <AiOutlineClose size={24} />
+            ) : (
+              <BiMenu size={24} />
+            )}
           </button>
         </div>
       </div>
 
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200" ref={mobileMenuRef}>
+        <div
+          className="md:hidden bg-white border-t border-gray-200"
+          ref={mobileMenuRef}
+        >
           <ul className="flex flex-col p-4">
             {navLinks.map(({ label, to }) => (
               <li key={label} className="mb-2">

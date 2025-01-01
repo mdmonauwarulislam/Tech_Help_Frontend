@@ -15,6 +15,8 @@ const Blog = () => {
 
   const [currentBlogPage, setCurrentBlogPage] = useState(1);
   const blogItemsPerPage = 3;
+  const limitedBlogs = blogs.slice(0, 5);
+
 
   const fetchBlogs = async () => {
     try {
@@ -44,7 +46,7 @@ const Blog = () => {
   const handleNextSlide = () => {
     setIsExiting(true);
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % blogs.length);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % limitedBlogs.length);
       setIsExiting(false);
     }, 500);
   };
@@ -53,7 +55,7 @@ const Blog = () => {
     setIsExiting(true);
     setTimeout(() => {
       setCurrentIndex(
-        (prevIndex) => (prevIndex - 1 + blogs.length) % blogs.length
+        (prevIndex) => (prevIndex - 1 + blogs.length) % limitedBlogs.length
       );
       setIsExiting(false);
     }, 500);
@@ -98,6 +100,7 @@ const Blog = () => {
     return () => clearInterval(interval); // Clear interval on component unmount
   }, [blogs.length]);
 
+
   return (
     <div className="relative carousel px-16">
       <div className="flex justify-end items-center p-10">
@@ -115,21 +118,21 @@ const Blog = () => {
         </h1>
       </div>
       {/* Show only the active slide */}
-      {blogs.length > 0 && (
+      {limitedBlogs.length > 0 && (
         <div
           className={`px-16 py-10 gap-10 transition duration-500 ease-linear flex justify-center ${
             isExiting ? "opacity-0" : "opacity-100"
           }`}
         >
           <div className="w-full p-4">
-            <CarouselCard item={blogs[currentIndex]} />
+            <CarouselCard item={limitedBlogs[currentIndex]} />
           </div>
         </div>
       )}
 
       {/* Slide Indicators */}
       <div className="flex justify-center mt-4">
-        {blogs.map((_, index) => (
+        {limitedBlogs.map((_, index) => (
           <span
             key={index}
             className={`h-2 w-2 rounded-full mx-1 cursor-pointer ${

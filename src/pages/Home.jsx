@@ -87,7 +87,7 @@ const jobs = [
 function Home() {
   const [blogs, setBlogs] = useState([]);
   const [currentBlogPage, setCurrentBlogPage] = useState(1);
-  const blogItemsPerPage = 6;
+  const blogItemsPerPage = 3;
 
   const fetchBlogs = async () => {
     try {
@@ -219,7 +219,7 @@ function Home() {
               </button>
             </div>
 
-            <div className="px-16 py-10 flex flex-wrap">
+            <div className="px-16 py-10 flex flex-row">
               {paginatedBlogPosts.map((blog) => (
                 <div className="w-full md:w-1/3 p-4" key={blog._id}>
                   <BlogCard item={blog} />
