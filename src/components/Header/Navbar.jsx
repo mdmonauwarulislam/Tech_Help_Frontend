@@ -49,6 +49,7 @@ const ProfileMenu = ({ closeMenus }) => {
     } else if (role === "company") {
       return [
         { label: "Dashboard", to: "/companydashboard" },
+        { label: "Profile", to: "/companyProfile" },
         { label: "Post Job", to: "/post-job" },
         { label: "Sign Out", signout: true },
       ];
@@ -177,7 +178,7 @@ const Navbar = () => {
 
         <div className="hidden md:flex items-center gap-6">
           {navLinks
-            .filter(({ allow }) => allow.includes(role) || allow === "all") // Filter items based on the role
+            .filter(({ allow }) => allow.includes(role) || allow === "all") 
             .map(({ label, to }) => (
               <div key={label} className="relative">
                 <Link

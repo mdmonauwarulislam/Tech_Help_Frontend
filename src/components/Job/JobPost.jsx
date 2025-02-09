@@ -78,12 +78,15 @@ const [skills,setSkills] = useState([]);
   }, [skills]);
   return (
     <>
+    <div className="flex justify-center py-20">
+
       <button
         onClick={handleOpen}
-        className="bg-primary text-white py-2 px-4 rounded-md"
+        className="bg-primary text-white py-2 px-4 rounded-md "
       >
         Post a Job
       </button>
+    </div>
       <Dialog
         size="lg"
         open={open}
@@ -249,8 +252,8 @@ const [skills,setSkills] = useState([]);
             <p className="text-slate-600 mt-4">Skills listed here</p>
             {
               skills.map((skill) => (
-                <div  className="flex gap-2 mt-2"> 
-                  <p  className="bg-gray-200 px-4 py-2 rounded-full">{skill}</p>
+                <div key={skill} className="flex gap-2 mt-2"> 
+                  <p className="bg-gray-200 px-4 py-2 rounded-full">{skill}</p>
                 </div>
               ))
             }
