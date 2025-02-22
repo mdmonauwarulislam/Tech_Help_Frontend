@@ -41,19 +41,19 @@ const AddNewDetails = () => {
 
   const openModal = (type = "") => {
     setIsModalOpen(true);
-    setCurrentEducation(null); // Reset for adding new entry
-    setEducationType(type); // Set the education type for the modal
+    setCurrentEducation(null);
+    setEducationType(type);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentEducation(null);
-    setEducationType(""); // Reset type on close
+    setEducationType(""); 
   };
 
   const handleEdit = (item, type) => {
     setCurrentEducation(item);
-    setEducationType(type); // Set type for editing
+    setEducationType(type);
     setIsModalOpen(true);
   };
 

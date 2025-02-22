@@ -52,6 +52,12 @@ function Login() {
           }else{
             navigate("/");
           }
+        }else if(userData.role === "mentor"){
+          if(!userData.isProfileCompleted){
+            navigate("/mentor-dashboard");
+          }else{
+            navigate("/");
+          }
         }
         else{
           navigate("/dashboard");

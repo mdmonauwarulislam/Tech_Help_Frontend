@@ -1,16 +1,30 @@
 import { HiOutlineCalendarDays } from "react-icons/hi2";
 import { GiMoneyStack } from "react-icons/gi";
 import { PiNotebook } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
 
 const NextSteps = () => {
+  const navigate = useNavigate();
+
   const steps = [
     {
       title: "Edit Availability",
       icon: <HiOutlineCalendarDays />,
       status: "complete",
+      path: "/mentor-dashboard/availability",
     },
-    { title: "Add Payment", icon: <GiMoneyStack />, status: "incomplete" },
-    { title: "Add Education", icon: <PiNotebook />, status: "incomplete" },
+    { 
+      title: "Add Payment", 
+      icon: <GiMoneyStack />, 
+      status: "incomplete",
+      path: "/mentor-dashboard/payments",
+    },
+    { 
+      title: "Add Education", 
+      icon: <PiNotebook />, 
+      status: "incomplete",
+      path: "/mentor-dashboard/profile",
+    },
   ];
 
   return (
@@ -24,6 +38,7 @@ const NextSteps = () => {
           <div
             key={index}
             className="border-2 p-6 rounded-2xl flex flex-col items-center cursor-pointer transition-transform duration-300 hover:scale-105"
+            onClick={() => navigate(step.path)}
           >
             <div className="text-5xl rounded-full p-5 bg-blue-50 text-primary relative">
               {step.icon}
