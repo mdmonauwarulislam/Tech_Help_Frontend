@@ -1,61 +1,30 @@
-import { useState, useEffect } from "react";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { CiBookmark } from "react-icons/ci";
 import { FaBookmark } from "react-icons/fa6";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
-const JobCard = ({ jobId }) => {
-  const [job, setJob] = useState(null);
-  const [loading, setLoading] = useState(true);
+const JobCard = ({ job }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const { user } = useSelector((state) => state?.user);
   const [isApplied, setIsApplied] = useState(false);
+  const { user } = useSelector((state) => state?.user);
   const navigate = useNavigate();
-  // Fetch job details
-  const fetchJob = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/jobs/getjob/${jobId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      if (response?.status == 200) {
-        setJob(response.data.job);
-        const data = response?.data?.job?.applicants;
-        console.log("data:", data);
-        data?.map((item) => {
-          if (item?.userId === user?.userId) {
-            setIsApplied(true);
-          }
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching job:", error);
-      toast.error("Failed to fetch the job");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    if (jobId) fetchJob();
-  }, [jobId]);
+    if (job?.applicants?.some((applicant) => applicant.userId === user?.userId)) {
+      setIsApplied(true);
+    }
+  }, [job, user]);
 
   const handleBookmarkClick = () => {
     setIsBookmarked((prev) => !prev);
     toast(isBookmarked ? "Removed from bookmarks" : "Bookmarked!");
-    // Optional: Sync with backend here if necessary
   };
-  
 
-  const getJobTypeStyles = (jobType) => {
-    switch (jobType?.toUpperCase()) {
+  const getJobTypeStyles = (type) => {
+    switch (type?.toUpperCase()) {
       case "FULL TIME":
         return "bg-green-200 text-green-900";
       case "PART TIME":
@@ -67,50 +36,35 @@ const JobCard = ({ jobId }) => {
     }
   };
 
-  if (loading) {
-    return <p>Loading job details...</p>;
-  }
-
-  if (!job) {
-    return <p>Job not found.</p>;
-  }
+  if (!job) return null;
 
   return (
     <div className="shadow-md rounded-lg py-4 px-8 relative bg-white border-2">
-      {/* Bookmark Icon */}
-      <div
-        className="absolute top-3 right-3 cursor-pointer text-primary"
-        onClick={handleBookmarkClick}
-      >
+      <div className="absolute top-3 right-3 cursor-pointer text-primary" onClick={handleBookmarkClick}>
         {isBookmarked ? <FaBookmark size={30} /> : <CiBookmark size={30} />}
       </div>
 
-      {/* Job Title */}
       <h3 className="text-xl font-semibold">{job.title}</h3>
 
-      {/* Job Type and Salary Range */}
       <p className="text-gray-600 mt-2">
-        <span
-          className={`font-semibold text-sm py-1 px-2 rounded-sm ${getJobTypeStyles(
-            job.type
-          )}`}
-        >
+        <span className={`font-semibold text-sm py-1 px-2 rounded-sm ${getJobTypeStyles(job.type)}`}>
           {job.type}
         </span>{" "}
         Salary: ₹{job.salary[0]?.minimum} - ₹{job.salary[0]?.maximum}
       </p>
 
-      {/* Company Info */}
       <div className="flex items-center gap-4 my-7">
         <img
-          src={job.companyLogo || "https://via.placeholder.com/150"}
+          src={
+            job.createdBy?.companyLogo
+              ? `${import.meta.env.VITE_API_URL}/uploads/${job.createdBy.companyLogo}`
+              : "https://via.placeholder.com/150"
+          }
           alt="Company Logo"
           className="w-16 h-16 rounded-full border-2 border-white"
         />
         <div>
-          <span className="font-semibold">
-            {job.createdBy?.username || "unknown"}
-          </span>
+          <span className="font-semibold">{job.createdBy?.username || "Unknown"}</span>
           <div className="flex items-center text-gray-500">
             <HiOutlineLocationMarker className="mr-1 text-xl" />
             <span>{job.location}</span>
@@ -118,32 +72,24 @@ const JobCard = ({ jobId }) => {
         </div>
       </div>
 
-      {/* Additional Job Details */}
-      <p className="text-gray-600 mb-4">
-        <strong>Experience:</strong> {job.experience} year(s)
-      </p>
-      <p className="text-gray-600 mb-4">
-        <strong>Work Mode:</strong> {job.workmode}
-      </p>
-      <p className="text-gray-600 mb-4">
-        <strong>Education Required:</strong> {job.education}
-      </p>
-      <p className="text-gray-600 mb-4">
-        <strong>Skills:</strong> {job.skills.join(", ")}
-      </p>
+      <p className="text-gray-600 mb-2"><strong>Experience:</strong> {job.experience} year(s)</p>
+      <p className="text-gray-600 mb-2"><strong>Work Mode:</strong> {job.workmode}</p>
+      <p className="text-gray-600 mb-2"><strong>Education:</strong> {job.education}</p>
+      <p className="text-gray-600 mb-4"><strong>Skills:</strong> {job.skills.join(", ")}</p>
 
-      {/* Action Buttons */}
       <div className="mt-4 flex justify-between items-center px-2">
-        <button className="border border-primary text-primary font-semibold py-2 px-4 rounded-md hover:bg-gray-100">
-          <Link to={`/single-job/${jobId}`}>View Details</Link>
-        </button>
+        <Link to={`/single-job/${job._id}`}>
+          <button className="border border-primary text-primary font-semibold py-2 px-4 rounded-md hover:bg-gray-100">
+            View Details
+          </button>
+        </Link>
         {isApplied ? (
-          <button className="bg-blue-gray-300 text-white py-2 px-4 rounded-md hover:bg-primary-dark cursor-not-allowed">
+          <button className="bg-gray-300 text-white py-2 px-4 rounded-md cursor-not-allowed">
             Applied
           </button>
         ) : (
           <button
-            onClick={() => navigate(`/single-job/${jobId}`)}
+            onClick={() => navigate(`/single-job/${job._id}`)}
             className="bg-primary text-white py-2 px-4 rounded-md hover:bg-primary-dark"
           >
             Apply Now

@@ -29,7 +29,7 @@ import Profile from "./components/Mentorship/Profile";
 import MentorDashboard from "./pages/DashBoard/MentorDashboard";
 import { useDispatch } from "react-redux";
 import { loadUser, login } from "./redux/slice/userSlice";
-import ServiceSection from "./components/Mentorship/ServiceSection";
+import ServiceSection from "./components/Mentorship/services/ServiceSection";
 import DashboardPage from "./components/Mentorship/DashboardPage";
 // import ProfilePage from "./components/Mentorship/ProfilePage";
 import Booking from "./components/Mentorship/Booking/Booking";
@@ -37,6 +37,9 @@ import AvailabilityPage from "./components/Mentorship/Availaibility/Availability
 import Roadmap from "./pages/Roadmap";
 import MentorRegister from "./components/MentorRegister";
 import MentorProfile from "./components/Mentorship/profile/MentorProfile";
+import AvailableServices from "./components/Mentorship/services/AvailableServices";
+import StudentBookings from "./components/Mentorship/Booking/StudentBookings";
+import BookingStatusPage from "./components/Mentorship/Booking/BookingStatusPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -102,7 +105,10 @@ function App() {
                 {/* <Route path="bookings" element={<BookingsPage />} /> */}
               </Route>
               <Route path="/mentorship" element={<MentorshipPage />} />
-              <Route path="/mentor-profile" element={<Profile />} />
+              <Route path="/mymentorship" element={<StudentBookings />} />
+              <Route path="/mentor/:mentorId" element={<Profile />} />
+              <Route path="/available-service" element={<AvailableServices />} />
+              <Route path="/payment/:id" element={<BookingStatusPage />} />
 
 
               {/* Roadmap */}

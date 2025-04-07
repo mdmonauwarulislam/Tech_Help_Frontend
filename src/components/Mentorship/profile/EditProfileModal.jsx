@@ -10,6 +10,9 @@ const EditProfileModal = ({ isOpen, onClose }) => {
   const [about, setAbout] = useState("");
   const [company, setCompany] = useState("");
   const [yearofexperience, setYearofexperience] = useState(null);
+  const [skills, setSkills] = useState("");
+  const [languages, setLanguages] = useState("");
+  const [category, setCategory] = useState("");
   
   // Handle image file selection
   const handleImageChange = (e) => {
@@ -28,6 +31,9 @@ const EditProfileModal = ({ isOpen, onClose }) => {
       editFormData.append("experties", experties);
       editFormData.append("company", company);
       editFormData.append("yearofexperience", yearofexperience);
+      editFormData.append("skills", JSON.stringify(skills.split(",").map(s => s.trim())));
+      editFormData.append("languages", JSON.stringify(languages.split(",").map(l => l.trim())));
+      editFormData.append("category", category);
       const response = await axios.put(
         `${import.meta.env.VITE_API_URL}/mentor/profile/update`,
         editFormData,
@@ -71,6 +77,9 @@ const EditProfileModal = ({ isOpen, onClose }) => {
         setAbout(response.data.data.about);
         setCompany(response.data.data.company);
         setYearofexperience(response.data.data.yearofexperience);
+        setSkills(response.data.data.skills?.join(", ") || "");
+        setLanguages(response.data.data.languages?.join(", ") || "");
+        setCategory(response.data.data.category);
 
       }
     } catch (error) {
@@ -187,6 +196,23 @@ const EditProfileModal = ({ isOpen, onClose }) => {
                 required
               />
             </div>
+
+            <div>
+              <label className="font-semibold" htmlFor="category">
+                Category
+              </label>
+              <input
+                className="py-2 px-4 mt-2 rounded-md border border-gray-300 w-full outline-none"
+                type="text"
+                id="category"
+                placeholder="Enter your category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                required
+              />
+            </div>
+
+
             <div>
               <label className="font-semibold" htmlFor="about">
                 About you
@@ -198,6 +224,30 @@ const EditProfileModal = ({ isOpen, onClose }) => {
                 value={about}
                 onChange={(e) => setAbout(e.target.value)}
               ></textarea>
+            </div>
+
+            <div>
+              <label className="font-semibold">Skills (comma-separated)</label>
+              <input
+                className="py-2 px-4 mt-2 rounded-md border border-gray-300 w-full outline-none"
+                type="text"
+                placeholder="e.g., React, Node.js, MongoDB"
+                value={skills}
+                onChange={(e) => setSkills(e.target.value)}
+              />
+            </div>
+
+            
+
+            <div>
+              <label className="font-semibold">Languages (comma-separated)</label>
+              <input
+                className="py-2 px-4 mt-2 rounded-md border border-gray-300 w-full outline-none"
+                type="text"
+                placeholder="e.g., English, Hindi, Spanish"
+                value={languages}
+                onChange={(e) => setLanguages(e.target.value)}
+              />
             </div>
 
           </div>

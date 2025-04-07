@@ -14,8 +14,10 @@ const MentorProfile = () => {
   const [experties, setExperties] = useState("");
   const [company, setCompany] = useState("");
   const [yearofexperience, setYearofexperience] = useState(null);
-  // const [skills, setSkills] = useState([]);
+  const [skills, setSkills] = useState([]);
+  const [languages, setLanguages] = useState([]);
   const [activeModal, setActiveModal] = useState(null);
+  const [category, setCategory] = useState("");
 
   const openProfileModal = () => setActiveModal("profile");
   // const openSkillsModal = () => setActiveModal("skills");
@@ -36,6 +38,20 @@ const MentorProfile = () => {
         setExperties(response.data.data.experties);
         setCompany(response.data.data.company);
         setYearofexperience(response.data.data.yearofexperience);
+        const parsedSkills =
+        Array.isArray(response.data.data.skills) && response.data.data.skills.length > 0
+          ? JSON.parse(response.data.data.skills[0])
+          : [];
+
+      const parsedLanguages =
+        Array.isArray(response.data.data.languages) && response.data.data.languages.length > 0
+          ? JSON.parse(response.data.data.languages[0])
+          : [];
+
+      setSkills(parsedSkills);
+      setLanguages(parsedLanguages);
+
+        setCategory(response.data.data.category);
       }
     } catch (error) {
       console.error("Error fetching mentor data:", error);
@@ -79,7 +95,9 @@ const MentorProfile = () => {
                 />
               </div>
               <div className="">
-                <h1 className="text-4xl font-semibold text-primary">{username}</h1>
+                <h1 className="text-4xl font-semibold text-primary">
+                  {username}
+                </h1>
                 {experties && experties.length > 0 ? (
                   <p className="text-xl">{experties}</p>
                 ) : (
@@ -87,19 +105,19 @@ const MentorProfile = () => {
                     Add experties using edit profile
                   </p>
                 )}
-                  <div className="flex gap-2">
+                <div className="flex gap-2">
                   <h1 className="text-lg font-medium">@ {company}</h1>
                   <div className="border-r-2 border-gray-500 h-7"></div>
                   <div>
-                  {yearofexperience !== null && yearofexperience > 0 ? (
-                    <p className="text-lg font-normal">{yearofexperience}+ Year of experience</p>
-                  ) : (
-                    <p className="text-gray-700 italic">
-                      Fresher
-                    </p>
-                  )}
+                    {yearofexperience !== null && yearofexperience > 0 ? (
+                      <p className="text-lg font-normal">
+                        {yearofexperience}+ Year of experience
+                      </p>
+                    ) : (
+                      <p className="text-gray-700 italic">Fresher</p>
+                    )}
                   </div>
-                  </div>
+                </div>
               </div>
             </div>
             <div className="flex gap-4">
@@ -118,30 +136,61 @@ const MentorProfile = () => {
       <div className="mt-10 border-2">
         <h3 className="text-2xl font-semibold text-primary px-2">About</h3>
         {about && about.length > 0 ? (
-          <p className="text-lg p-2 text-justify leading-7 tracking-tight">{about}</p>
+          <p className="text-lg p-2 text-justify leading-7 tracking-tight">
+            {about}
+          </p>
         ) : (
           <p className="text-gray-700 italic p-2">Add about yourself</p>
         )}
       </div>
 
       {/* Skills section */}
-      {/* <div className="mt-4 border-2">
-        <h3 className="text-lg font-semibold">Skills</h3>
-        {skills && skills.length > 0 ? (
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill) => (
-              <span
-                key={skill._id}
-                className="border-2 border-gray-900 rounded-xl p-2"
+      <div className="mt-10 border-2">
+        <h3 className="text-2xl font-semibold text-primary px-2">Skills</h3>
+        {skills.length > 0 ? (
+          <ul className="flex flex-wrap gap-2 p-2">
+            {skills.map((skill, index) => (
+              <li
+                key={index}
+                className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm"
               >
-                {skill.title}
-              </span>
+                {skill}
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
-          <p className="text-gray-700 italic p-2">Add skills using edit profile</p>
+          <p className="text-gray-700 italic p-2">Add your skills</p>
         )}
-      </div> */}
+      </div>
+
+      {/* Languages section */}
+      <div className="mt-10 border-2">
+        <h3 className="text-2xl font-semibold text-primary px-2">Languages</h3>
+        {languages.length > 0 ? (
+          <ul className="flex flex-wrap gap-2 p-2">
+            {languages.map((lang, index) => (
+              <li
+                key={index}
+                className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm"
+              >
+                {lang}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-700 italic p-2">Add languages you know</p>
+        )}
+      </div>
+
+      {/* Category section */}
+      <div className="mt-10 border-2">
+        <h3 className="text-2xl font-semibold text-primary px-2">Category</h3>
+        {category && category.length > 0 ? (
+          <p className="text-lg p-2">{category}</p>
+        ) : (
+          <p className="text-gray-700 italic p-2">Add your category</p>
+        )}
+      </div>
 
       <div>
         <div className="py-4">

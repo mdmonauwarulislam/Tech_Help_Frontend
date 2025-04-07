@@ -1,6 +1,6 @@
 import { BiLoader } from "react-icons/bi";
 import NextSteps from "../../components/Mentorship/NextSteps";
-import ServicesList from "../../components/Mentorship/ServicesList";
+import ServicesList from "../../components/Mentorship/services/ServicesList";
 import { useEffect, useState } from "react";
 import axios from "axios";
 

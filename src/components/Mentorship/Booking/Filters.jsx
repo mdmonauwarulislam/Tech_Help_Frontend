@@ -1,5 +1,21 @@
 const Filters = () => {
     return (
+      <div className="flex items-center justify-between mb-4">
+      <div>
+        <ul>
+        <li className="inline-block mr-4">
+          <button className="text-gray-500 hover:bg-primary border-b-gray-600 border hover:text-white px-3 py-2 rounded-full">All booking</button>
+        </li>
+        <li className="inline-block mr-4">
+          <button className="text-gray-500 hover:bg-primary border-b-gray-600 border hover:text-white px-3 py-2 rounded-full">Upcoming</button>
+        </li>
+        <li className="inline-block mr-4">
+          <button className="text-gray-500 hover:bg-primary border-b-gray-600 border hover:text-white px-3 py-2 rounded-full">Expired</button>
+        </li>
+        </ul>
+      </div>
+
+      <div className="flex gap-4"></div>
       <div className="flex gap-4">
         {/* Date Filter */}
         <select
@@ -22,6 +38,7 @@ const Filters = () => {
           <option>Queries</option>
           <option>Resources</option>
         </select>
+      </div>
       </div>
     );
   };

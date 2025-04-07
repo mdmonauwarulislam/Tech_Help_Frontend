@@ -1,163 +1,105 @@
-import  { useState } from "react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { useState } from "react";
 
-const JobFilter = () => {
-  const [showJobType, setShowJobType] = useState(false);
-  const [showJobMode, setShowJobMode] = useState(false);
-  const [showJobFunctions, setShowJobFunctions] = useState(false);
-  const [showExperienceLevel, setShowExperienceLevel] = useState(false);
+const JobFilter = ({ jobs, filters, onChange }) => {
+  const [show, setShow] = useState({
+    jobType: true,
+    jobMode: true,
+    jobFunctions: false,
+    experienceLevel: false,
+  });
 
-  const jobTypes = [
-    { name: "All", count: 50 },
-    { name: "Full-time Job", count: 30 },
-    { name: "Part-time", count: 15 },
-    { name: "Internship", count: 5 },
-  ];
+  // Extract unique values and their counts from jobs
+  const getCounts = (key) => {
+    const counts = {};
+    jobs.forEach((job) => {
+      const value = job[key];
+      if (value) counts[value] = (counts[value] || 0) + 1;
+    });
+    return Object.entries(counts).map(([name, count]) => ({ name, count }));
+  };
 
-  const jobModes = [
-    { name: "Onsite", count: 20 },
-    { name: "Remote", count: 25 },
-    { name: "Hybrid", count: 15 },
-  ];
+  const getSkillCounts = () => {
+    const counts = {};
+    jobs.forEach((job) => {
+      job.skills.forEach((skill) => {
+        counts[skill] = (counts[skill] || 0) + 1;
+      });
+    });
+    return Object.entries(counts).map(([name, count]) => ({ name, count }));
+  };
 
-  const jobFunctions = [
-    { name: "Marketing", count: 10 },
-    { name: "Engineering", count: 15 },
-    { name: "Design", count: 12 },
-    { name: "Customer Service", count: 8 },
-    { name: "Support", count: 7 },
-    { name: "Add", count: 0 },
-  ];
-
-  const experienceLevels = [
-    { name: "Fresher/Entry Level", count: 20 },
-    { name: "Junior", count: 15 },
-    { name: "Mid-level", count: 10 },
-    { name: "Senior", count: 5 },
-    { name: "Lead/Managerial", count: 3 },
-    { name: "Director/Executive", count: 2 },
-  ];
+  const handleChange = (category, value) => {
+    onChange(category, value);
+  };
 
   return (
-    <div className="w-full max-w-md mx-auto p-4 border rounded-lg shadow-md bg-gray-50">
-      
-
-      {/* Salary Range */}
-      <div className="mb-4">
-        <label className="block text-lg font-medium mb-1">Salary Range</label>
-        <div className="flex space-x-2">
-          <input
-            type="number"
-            placeholder="Min"
-            className="w-full border rounded-md py-2 px-3"
-          />
-          <input
-            type="number"
-            placeholder="Max"
-            className="w-full border rounded-md py-2 px-3"
-          />
-        </div>
-      </div>
-
-      {/* Job Type */}
-      <div className="mb-4">
-        <div
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => setShowJobType(!showJobType)}
-        >
-          <h3 className="text-lg font-medium">Job Type</h3>
-          {showJobType ? <IoIosArrowUp /> : <IoIosArrowDown />}
-        </div>
-        {showJobType && (
-          <div className="mt-2 space-y-1">
-            {jobTypes.map((type) => (
-              <div key={type.name} className="flex items-center">
-                <input type="checkbox" id={type.name} />
-                <label htmlFor={type.name} className="ml-2">
-                  {type.name} ({type.count})
-                </label>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <hr className="my-4" />
-
-      {/* Job Mode */}
-      <div className="mb-4">
-        <div
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => setShowJobMode(!showJobMode)}
-        >
-          <h3 className="text-lg font-medium">Job Mode</h3>
-          {showJobMode ? <IoIosArrowUp /> : <IoIosArrowDown />}
-        </div>
-        {showJobMode && (
-          <div className="mt-2 space-y-1">
-            {jobModes.map((mode) => (
-              <div key={mode.name} className="flex items-center">
-                <input type="checkbox" id={mode.name} />
-                <label htmlFor={mode.name} className="ml-2">
-                  {mode.name} ({mode.count})
-                </label>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <hr className="my-4" />
-
-      {/* Job Functions */}
-      <div className="mb-4">
-        <div
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => setShowJobFunctions(!showJobFunctions)}
-        >
-          <h3 className="text-lg font-medium">Job Functions</h3>
-          {showJobFunctions ? <IoIosArrowUp /> : <IoIosArrowDown />}
-        </div>
-        {showJobFunctions && (
-          <div className="mt-2 space-y-1">
-            {jobFunctions.map((func) => (
-              <div key={func.name} className="flex items-center">
-                <input type="checkbox" id={func.name} />
-                <label htmlFor={func.name} className="ml-2">
-                  {func.name} ({func.count})
-                </label>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      <hr className="my-4" />
-
-      {/* Experience Level */}
-      <div className="mb-4">
-        <div
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => setShowExperienceLevel(!showExperienceLevel)}
-        >
-          <h3 className="text-lg font-medium">Experience Level</h3>
-          {showExperienceLevel ? <IoIosArrowUp /> : <IoIosArrowDown />}
-        </div>
-        {showExperienceLevel && (
-          <div className="mt-2 space-y-1">
-            {experienceLevels.map((level) => (
-              <div key={level.name} className="flex items-center">
-                <input type="checkbox" id={level.name} />
-                <label htmlFor={level.name} className="ml-2">
-                  {level.name} ({level.count})
-                </label>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+    <div className="w-full max-w-md p-4 border rounded-lg shadow-md bg-gray-50">
+      <FilterSection
+        title="Job Type"
+        category="jobTypes"
+        isOpen={show.jobType}
+        toggle={() => setShow((s) => ({ ...s, jobType: !s.jobType }))}
+        options={getCounts("type")}
+        selected={filters.jobTypes}
+        onChange={handleChange}
+      />
+      <FilterSection
+        title="Job Mode"
+        category="jobModes"
+        isOpen={show.jobMode}
+        toggle={() => setShow((s) => ({ ...s, jobMode: !s.jobMode }))}
+        options={getCounts("workmode")}
+        selected={filters.jobModes}
+        onChange={handleChange}
+      />
+      <FilterSection
+        title="Functions"
+        category="functions"
+        isOpen={show.jobFunctions}
+        toggle={() => setShow((s) => ({ ...s, jobFunctions: !s.jobFunctions }))}
+        options={getSkillCounts()}
+        selected={filters.functions}
+        onChange={handleChange}
+      />
+      <FilterSection
+        title="Experience"
+        category="experienceLevels"
+        isOpen={show.experienceLevel}
+        toggle={() => setShow((s) => ({ ...s, experienceLevel: !s.experienceLevel }))}
+        options={getCounts("experience")}
+        selected={filters.experienceLevels}
+        onChange={handleChange}
+      />
     </div>
   );
 };
+
+const FilterSection = ({ title, category, isOpen, toggle, options, selected, onChange }) => (
+  <div className="mb-4">
+    <div className="flex justify-between items-center cursor-pointer" onClick={toggle}>
+      <h3 className="text-lg font-medium">{title}</h3>
+      {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
+    </div>
+    {isOpen && (
+      <div className="mt-2 space-y-1">
+        {options.map(({ name, count }) => (
+          <div key={name} className="flex items-center">
+            <input
+              type="checkbox"
+              id={`${category}-${name}`}
+              checked={selected.includes(name)}
+              onChange={() => onChange(category, name)}
+            />
+            <label htmlFor={`${category}-${name}`} className="ml-2">
+              {name} ({count})
+            </label>
+          </div>
+        ))}
+      </div>
+    )}
+    <hr className="my-4" />
+  </div>
+);
 
 export default JobFilter;

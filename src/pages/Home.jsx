@@ -2,88 +2,10 @@ import HeaderImg from "../assets/header.webp";
 import growthVector from "../assets/pattern.png";
 import { SiBloglovin, SiCodementor } from "react-icons/si";
 import { RiRoadMapFill, RiUserSearchFill } from "react-icons/ri";
-import BlogCard from "../components/Blog/BlogCard";
 import axios from "axios";
-import JobCard from "../components/Job/JobCard";
 import { useEffect, useState } from "react";
 
-const jobs = [
-  {
-    id: 1,
-    title: "Software Engineer",
-    type: "Full-Time",
-    salaryRange: "₹60,000 - ₹80,000",
-    companyName: "Tech Company",
-    location: "Mumbai, India",
-    applicantsCount: "25+ Applicants",
-    logo: "https://via.placeholder.com/40",
-    profiles: [
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-    ],
-  },
-  {
-    id: 2,
-    title: "Part-Time Graphic Designer",
-    type: "Part-Time",
-    salaryRange: "₹20,000 - ₹40,000",
-    companyName: "Creative Agency",
-    location: "Delhi, India",
-    applicantsCount: "10+ Applicants",
-    logo: "https://via.placeholder.com/40",
-    profiles: [
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-    ],
-  },
-  {
-    id: 3,
-    title: "Internship in Marketing",
-    type: "Internship",
-    salaryRange: "₹15,000 - ₹25,000",
-    companyName: "Marketing Solutions",
-    location: "Bangalore, India",
-    applicantsCount: "5+ Applicants",
-    logo: "https://via.placeholder.com/40",
-    profiles: [
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-    ],
-  },
-  {
-    id: 4,
-    title: "Remote Customer Support",
-    type: "Internship",
-    salaryRange: "₹30,000 - ₹50,000",
-    companyName: "Support Co.",
-    location: "Remote",
-    applicantsCount: "15+ Applicants",
-    logo: "https://via.placeholder.com/40",
-    profiles: [
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-    ],
-  },
-  {
-    id: 5,
-    title: "Hybrid Product Manager",
-    type: "Full-Time",
-    salaryRange: "₹80,000 - ₹1,00,000",
-    companyName: "Product Inc.",
-    location: "Pune, India",
-    applicantsCount: "8+ Applicants",
-    logo: "https://via.placeholder.com/40",
-    profiles: [
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-      "https://via.placeholder.com/40",
-    ],
-  },
-];
+
 function Home() {
   const [blogs, setBlogs] = useState([]);
   const [currentBlogPage, setCurrentBlogPage] = useState(1);
@@ -110,20 +32,6 @@ function Home() {
     }
   };
 
-  const handleNextBlogPage = () => {
-    setCurrentBlogPage((prevPage) =>
-      Math.min(prevPage + 1, Math.ceil(blogs.length / blogItemsPerPage))
-    );
-  };
-
-  const handlePrevBlogPage = () => {
-    setCurrentBlogPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
-
-  const paginatedBlogPosts = blogs.slice(
-    (currentBlogPage - 1) * blogItemsPerPage,
-    currentBlogPage * blogItemsPerPage
-  );
 
   useEffect(() => {
     fetchBlogs();
@@ -205,74 +113,14 @@ function Home() {
         <div>
           {/* Blog section */}
           <div>
-            <div className="flex justify-between items-center mb-10">
-              <div>
-                <h1 className="text-4xl font-semibold text-primary ">
-                  Recent Blog
-                </h1>
-                <p className="text-xl font-medium text-gray-700 ">
-                  Read the latest blog on career growth and technology
-                </p>
-              </div>
-              <button className="px-4 py-2 border-2 border-primary rounded-md">
-                View All
-              </button>
-            </div>
-
-            <div className="px-16 py-10 flex flex-row">
-              {paginatedBlogPosts.map((blog) => (
-                <div className="w-full md:w-1/3 p-4" key={blog._id}>
-                  <BlogCard item={blog} />
-                </div>
-              ))}
-            </div>
+           
 
             {/* Pagination Controls (Aligned to the right) */}
             <div className="flex justify-end gap-4 mt-6">
-              <button
-                onClick={handlePrevBlogPage}
-                disabled={currentBlogPage === 1}
-                className="p-2 text-white text-sm bg-blue-600 rounded disabled:bg-gray-300"
-              >
-                Back
-              </button>
-              <span className="text-sm flex justify-center items-center">
-                Page {currentBlogPage} of{" "}
-                {Math.ceil(blogs.length / blogItemsPerPage)}
-              </span>
-              <button
-                onClick={handleNextBlogPage}
-                disabled={
-                  currentBlogPage === Math.ceil(blogs.length / blogItemsPerPage)
-                }
-                className="p-2 text-white text-sm bg-blue-600 rounded disabled:bg-gray-300"
-              >
-                Next
-              </button>
+              
             </div>
           </div>
-          {/* Job Sections */}
-          <div className="pb-20">
-            <div className="flex justify-between items-center mb-10 mt-20">
-              <div>
-                <h1 className="text-4xl font-semibold text-primary">
-                  Recent Jobs
-                </h1>
-                <p className="text-xl font-medium text-gray-700">
-                  Find the best jobs that match your skills and experience
-                </p>
-              </div>
-              <button className="px-4 py-2 border-2 border-primary rounded-md">
-                View All
-              </button>
-            </div>
 
-            <div className="grid grid-cols-3 gap-16 ">
-              {jobs.map((job) => (
-                <JobCard key={job.id} {...job} />
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </>

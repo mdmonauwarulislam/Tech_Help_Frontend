@@ -71,22 +71,22 @@ const MentorDashboardSidebar = () => {
       icon: <LuSmilePlus />,
       path: "/mentor-dashboard/bookings",
     },
-    {
-      name: "Availability",
-      icon: <PiClockUser />,
-      path: "/mentor-dashboard/availability",
-    },
-    {
-      name: "Payments",
-      icon: <RiMoneyRupeeCircleLine />,
-      path: "/mentor-dashboard/payments",
-      dot: true,
-    },
-    {
-      name: "Reviews",
-      icon: <MdOutlineRateReview />,
-      path: "/mentor-dashboard/reviews",
-    },
+    // {
+    //   name: "Availability",
+    //   icon: <PiClockUser />,
+    //   path: "/mentor-dashboard/availability",
+    // },
+    // {
+    //   name: "Payments",
+    //   icon: <RiMoneyRupeeCircleLine />,
+    //   path: "/mentor-dashboard/payments",
+    //   dot: true,
+    // },
+    // {
+    //   name: "Reviews",
+    //   icon: <MdOutlineRateReview />,
+    //   path: "/mentor-dashboard/reviews",
+    // },
   ];
 
   return (

@@ -43,6 +43,7 @@ const ProfileMenu = ({ closeMenus }) => {
     if (role === "student") {
       return [
         { label: "Dashboard", to: "/userdashboard" },
+        { label: "Mentorship", to: "/mymentorship" },
         { label: "My Blog", to: "/myblog" },
         { label: "Sign Out", signout: true },
       ];
@@ -51,6 +52,13 @@ const ProfileMenu = ({ closeMenus }) => {
         { label: "Dashboard", to: "/companydashboard" },
         { label: "Profile", to: "/companyProfile" },
         { label: "Post Job", to: "/post-job" },
+        { label: "Sign Out", signout: true },
+      ];
+    } else if (role === "mentor") {
+      return [
+        { label: "Dashboard", to: "/mentor-dashboard" },
+        { label: "Profile", to: "/mentor-profile" },
+        
         { label: "Sign Out", signout: true },
       ];
     }
@@ -168,7 +176,7 @@ const Navbar = () => {
 
   return (
     <nav className="mx-auto w-full p-2 bg-white shadow-lg">
-      <div className="flex items-center justify-between md:w-10/12 w-11/12 mx-auto">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
         <Link
           to="/"
           className="mr-4 ml-2 text-primary cursor-pointer py-2 font-bold text-2xl md:text-3xl xl:text-4xl"

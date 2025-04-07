@@ -27,6 +27,8 @@ const NextSteps = () => {
     },
   ];
 
+  
+
   return (
     <div className="bg-white rounded-2xl">
       <div className="px-5 py-6">
