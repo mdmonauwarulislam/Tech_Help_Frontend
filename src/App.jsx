@@ -92,12 +92,11 @@ function App() {
                 <Route path="profile" element={<ProfilePage />} />
                 <Route path="services" element={<ServiceSection />} />
                 <Route path="bookings" element={<Booking />} />
-                <Route path="availability" element={<AvailabilityPage/>} />
+                <Route path="availability" element={<AvailabilityPage />} />
                 {/* <Route path="bookings" element={<BookingsPage />} /> */}
               </Route>
               <Route path="/mentorship" element={<MentorshipPage />} />
               <Route path="/mentor-profile" element={<Profile />} />
-
 
               {/* Roadmap */}
               <Route path="/roadmap" element={<Roadmap />} />
