@@ -41,7 +41,9 @@ const CarouselCard = ({ item }) => {
           <div className="flex items-center gap-3">
             <div className="w-12 h-12">
               <img
-                src={`${import.meta.env.VITE_API_URL}/uploads/${item?.user?.profilePicture}`}
+                src={`${import.meta.env.VITE_API_URL}/uploads/${
+                  item?.user?.profilePicture
+                }`}
                 alt={item?.user?.userName || "User"}
                 className="w-full h-full rounded-full object-cover"
               />

@@ -101,7 +101,7 @@ function App() {
                 <Route path="profile" element={<MentorProfile />} />
                 <Route path="services" element={<ServiceSection />} />
                 <Route path="bookings" element={<Booking />} />
-                <Route path="availability" element={<AvailabilityPage/>} />
+                <Route path="availability" element={<AvailabilityPage />} />
                 {/* <Route path="bookings" element={<BookingsPage />} /> */}
               </Route>
               <Route path="/mentorship" element={<MentorshipPage />} />
@@ -109,7 +109,6 @@ function App() {
               <Route path="/mentor/:mentorId" element={<Profile />} />
               <Route path="/available-service" element={<AvailableServices />} />
               <Route path="/payment/:id" element={<BookingStatusPage />} />
-
 
               {/* Roadmap */}
               <Route path="/roadmap" element={<Roadmap />} />

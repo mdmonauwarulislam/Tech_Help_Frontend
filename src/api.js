@@ -31,7 +31,7 @@ export const addComment = async (id, comment) => {
     { text: comment },
     {
       headers: {
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     }
   );
@@ -40,7 +40,7 @@ export const addComment = async (id, comment) => {
 
 // Increment Share Count
 export const incrementShare = async (id) => {
-  const token = localStorage.getItem("authToken"); 
+  const token = localStorage.getItem("authToken");
   const response = await axios.post(
     `${API_URL}/blogs/${id}/share`,
     {},
