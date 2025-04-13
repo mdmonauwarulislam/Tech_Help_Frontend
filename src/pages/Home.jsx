@@ -5,7 +5,6 @@ import { RiRoadMapFill, RiUserSearchFill } from "react-icons/ri";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-
 function Home() {
   const [blogs, setBlogs] = useState([]);
   const [currentBlogPage, setCurrentBlogPage] = useState(1);
@@ -31,7 +30,6 @@ function Home() {
       console.error(error);
     }
   };
-
 
   useEffect(() => {
     fetchBlogs();
@@ -113,14 +111,9 @@ function Home() {
         <div>
           {/* Blog section */}
           <div>
-           
-
             {/* Pagination Controls (Aligned to the right) */}
-            <div className="flex justify-end gap-4 mt-6">
-              
-            </div>
+            <div className="flex justify-end gap-4 mt-6"></div>
           </div>
-
         </div>
       </div>
     </>

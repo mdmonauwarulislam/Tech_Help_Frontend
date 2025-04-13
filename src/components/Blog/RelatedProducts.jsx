@@ -1,55 +1,32 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import moment from "moment";
 
-const RelatedProducts = ({
-  blogImage,
-  p1,
-  date,
-  p2,
-  p3,
-  userImage,
-  userName,
-  userRole,
-}) => {
+const RelatedBlogs = ({ blog }) => {
   return (
-    <div>
-      <div className="flex gap-4">
-        <div className="image w-60 h-32 rounded-lg">
-          <img
-            src={blogImage}
-            className="w-full h-full object-fit rounded-lg"
-            alt=""
-          />
-        </div>
-        <div className="content">
-          <div className="">
-            <p>
-              <span className="font-bold text-[14px]">{p1}</span>:{" "}
-              <span className="text-sm text-[#929292]">{date}</span>
-            </p>
+    <Link
+      to={`/blog/${blog._id}/blog-post-details`}
+      className="block hover:bg-gray-50 p-2 rounded-lg transition"
+    >
+      <div className="flex items-start gap-3">
+        {blog.image && (
+          <div className="flex-shrink-0 w-16 h-16">
+            <img
+              src={blog.image}
+              alt={blog.title}
+              className="w-full h-full object-cover rounded-lg"
+            />
           </div>
-          <div>
-            <h1 className="text-xl font-serif font-bold">{p2}</h1>
-          </div>
-          {/* <div>
-            <p className="text-[#929292]">{p3}</p>
-          </div> */}
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8">
-              <img
-                src={userImage}
-                className="w-full h-full rounded-full"
-                alt=""
-              />
-            </div>
-            <div>
-              <h1 className="font-bold text-[12px]">{userName}</h1>
-              <p className="text-[10px] text-[#929292]">{userRole}</p>
-            </div>
-          </div>
+        )}
+        <div>
+          <h3 className="font-semibold text-sm line-clamp-2">{blog.title}</h3>
+          <p className="text-xs text-gray-500 mt-1">
+            {moment(blog.createdAt).fromNow()}
+          </p>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
-export default RelatedProducts;
+export default RelatedBlogs;

@@ -1,54 +1,73 @@
 import axios from "axios";
-
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Get blog by ID
-export const fetchBlogById = async (id) => {
-  const response = await axios.get(`${API_URL}/blogs/${id}`);
-  return response.data;
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("User not authenticated");
+  }
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 };
 
-// Toggle Like
-export const toggleLike = async (id) => {
-  const token = localStorage.getItem("authToken");
-  const response = await axios.post(
-    `${API_URL}/blogs/${id}/like`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
+// Handle API errors consistently
+const handleApiError = (error) => {
+  if (error.response?.status === 401) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    window.location.href = "/login";
+  }
+  throw error.response?.data?.message || error.message;
 };
 
-// Add Comment
-export const addComment = async (id, comment) => {
-  const token = localStorage.getItem("authToken");
-  const response = await axios.post(
-    `${API_URL}/blogs/${id}/comment`,
-    { text: comment },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
+export const toggleLike = async (blogId) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/blog/${blogId}/like`,
+      {},
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
 };
 
-// Increment Share Count
-export const incrementShare = async (id) => {
-  const token = localStorage.getItem("authToken");
-  const response = await axios.post(
-    `${API_URL}/blogs/${id}/share`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
-  return response.data;
+export const toggleBookmark = async (blogId) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/blog/${blogId}/bookmark`,
+      {},
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+export const addComment = async (blogId, comment) => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/blog/${blogId}/comment`,
+      { text: comment },
+      getAuthHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+export const shareBlog = async (blogId) => {
+  try {
+    const response = await axios.post(`${API_URL}/blog/${blogId}/share`);
+    return response.data;
+  } catch (error) {
+    handleApiError(error);
+  }
 };

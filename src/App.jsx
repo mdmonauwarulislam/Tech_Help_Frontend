@@ -86,11 +86,17 @@ function App() {
               />
               <Route
                 path="/signup/mentor-register"
-                element={<MentorRegister/>}
+                element={<MentorRegister />}
               />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog-post-details" element={<BlogPostDetails />} />
               <Route path="/myblog" element={<MyBlog />} />
+
+              <Route
+                path="/blog/:id/blog-post-details"
+                element={<BlogPostDetails />}
+              />
+
               <Route path="/job-page" element={<JobPage />} />
               <Route path="/post-job" element={<PostJob />} />
               <Route path="/single-job/:jobId" element={<SingleJobCard />} />
@@ -107,7 +113,10 @@ function App() {
               <Route path="/mentorship" element={<MentorshipPage />} />
               <Route path="/mymentorship" element={<StudentBookings />} />
               <Route path="/mentor/:mentorId" element={<Profile />} />
-              <Route path="/available-service" element={<AvailableServices />} />
+              <Route
+                path="/available-service"
+                element={<AvailableServices />}
+              />
               <Route path="/payment/:id" element={<BookingStatusPage />} />
 
               {/* Roadmap */}
