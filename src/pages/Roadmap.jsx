@@ -468,15 +468,7 @@ const Roadmap = () => {
   const handlePathSelect = (path) => {
     setSelectedPath(path);
   };
-  const [selectedPath, setSelectedPath] = useState(null);
 
-  const handlePathSelect = (path) => {
-    setSelectedPath(path);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedPath(null);
-  };
   const handleCloseModal = () => {
     setSelectedPath(null);
   };
@@ -520,47 +512,8 @@ const Roadmap = () => {
           path={selectedPath}
           data={selectedPath ? roadmapData[selectedPath] : null}
         />
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">
-            Technology Roadmaps
-          </h1>
-          <p className="text-xl text-gray-600 mb-12">
-            Choose your learning path and follow our detailed roadmap to success
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {Object.keys(roadmapData).map((path) => (
-            <button
-              key={path}
-              onClick={() => handlePathSelect(path)}
-              className="p-6 rounded-lg transition-all bg-white hover:shadow-lg hover:scale-105 group"
-            >
-              <div className="flex items-center space-x-3">
-                <div
-                  className={`${roadmapData[path].color} p-2 rounded-lg text-white`}
-                >
-                  {roadmapData[path].icon}
-                </div>
-                <span className="font-semibold text-gray-900 group-hover:text-gray-600">
-                  {path}
-                </span>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        <Modal
-          isOpen={selectedPath !== null}
-          onClose={handleCloseModal}
-          path={selectedPath}
-          data={selectedPath ? roadmapData[selectedPath] : null}
-        />
       </div>
     </div>
   );
 };
-
 export default Roadmap;
